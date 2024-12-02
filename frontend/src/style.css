@@ -1,0 +1,328 @@
+.screen {
+    background-color: #252526;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .screen .overlap-wrapper {
+    background-color: #252526;
+    height: 832px;
+    width: 1280px;
+  }
+  
+  .screen .overlap {
+    height: 832px;
+    position: relative;
+  }
+  
+  .screen .overlap-group {
+    height: 832px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 1280px;
+  }
+  
+  .screen .rectangle {
+    height: 832px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 244px;
+  }
+  
+  .screen .element {
+    height: 19px;
+    left: 200px;
+    object-fit: cover;
+    position: absolute;
+    top: 70px;
+    width: 19px;
+  }
+  
+  .screen .div {
+    background-color: #424242;
+    height: 52px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 1280px;
+  }
+  
+  .screen .img {
+    height: 34px;
+    left: 20px;
+    object-fit: cover;
+    position: absolute;
+    top: 9px;
+    width: 82px;
+  }
+  
+  .screen .ellipse {
+    background-color: #d9d9d9;
+    border-radius: 15px;
+    height: 30px;
+    left: 1219px;
+    position: absolute;
+    top: 11px;
+    width: 30px;
+  }
+  
+  .screen .view {
+    height: 53px;
+    left: 11px;
+    position: absolute;
+    top: 123px;
+    width: 221px;
+  }
+  
+  .screen .overlap-group-2 {
+    background-color: #1e1e1e;
+    border-radius: 4px;
+    height: 53px;
+    position: relative;
+    width: 219px;
+  }
+  
+  .screen .element-2 {
+    height: 25px;
+    left: 13px;
+    object-fit: cover;
+    position: absolute;
+    top: 14px;
+    width: 25px;
+  }
+  
+  .screen .text-wrapper {
+    color: #ffffff;
+    font-family: "Noto Sans Inscriptional Pahlavi", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    height: 34px;
+    left: 13px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 10px;
+    width: 149px;
+  }
+  
+  .screen .overlap-group-wrapper {
+    height: 53px;
+    left: 11px;
+    position: absolute;
+    top: 384px;
+    width: 221px;
+  }
+  
+  .screen .text-wrapper-2 {
+    color: #ffffff;
+    font-family: "Noto Sans Inscriptional Pahlavi", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    height: 34px;
+    left: 43px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 10px;
+    width: 149px;
+  }
+  
+  .screen .div-wrapper {
+    height: 53px;
+    left: 11px;
+    position: absolute;
+    top: 210px;
+    width: 221px;
+  }
+  
+  .screen .text-wrapper-3 {
+    color: #ffffff;
+    font-family: "Noto Sans Inscriptional Pahlavi", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    height: 34px;
+    left: 44px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 10px;
+    width: 149px;
+  }
+  
+  .screen .AI {
+    height: 53px;
+    left: 11px;
+    position: absolute;
+    top: 297px;
+    width: 221px;
+  }
+  
+  .screen .text-wrapper-4 {
+    color: #ffffff;
+    font-family: "Noto Sans Inscriptional Pahlavi", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    height: 34px;
+    left: 36px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 10px;
+    width: 149px;
+  }
+  
+  .screen .view-2 {
+    height: 53px;
+    left: 11px;
+    position: absolute;
+    top: 756px;
+    width: 221px;
+  }
+  
+  .screen .text-wrapper-5 {
+    color: #ffffff;
+    font-family: "Noto Sans Inscriptional Pahlavi", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    height: 34px;
+    left: 35px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 10px;
+    width: 149px;
+  }
+  
+  .screen .overlap-2 {
+    border-radius: 6px;
+    height: 28px;
+    left: 938px;
+    position: absolute;
+    top: 80px;
+    width: 311px;
+  }
+  
+  .screen .group {
+    border: 1px solid;
+    border-color: #ffffff;
+    border-radius: 6px;
+    height: 28px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 311px;
+  }
+  
+  .screen .element-3 {
+    height: 15px;
+    left: 7px;
+    object-fit: cover;
+    position: absolute;
+    top: 5px;
+    width: 15px;
+  }
+  
+  .screen .element-4 {
+    height: 15px;
+    left: 281px;
+    object-fit: cover;
+    position: absolute;
+    top: 6px;
+    width: 15px;
+  }
+  
+  .screen .overlap-3 {
+    height: 612px;
+    left: 938px;
+    position: absolute;
+    top: 168px;
+    width: 311px;
+  }
+  
+  .screen .rectangle-2 {
+    height: 570px;
+    left: 0;
+    position: absolute;
+    top: 42px;
+    width: 311px;
+  }
+  
+  .screen .rectangle-3 {
+    height: 43px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 119px;
+  }
+  
+  .screen .overlap-4 {
+    height: 614px;
+    left: 289px;
+    position: absolute;
+    top: 166px;
+    width: 581px;
+  }
+  
+  .screen .rectangle-4 {
+    height: 570px;
+    left: 0;
+    position: absolute;
+    top: 44px;
+    width: 581px;
+  }
+  
+  .screen .rectangle-5 {
+    height: 40px;
+    left: 154px;
+    position: absolute;
+    top: 5px;
+    width: 150px;
+  }
+  
+  .screen .text-wrapper-6 {
+    color: #ffffff;
+    font-family: "Noto Sans Inscriptional Pahlavi", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    height: 44px;
+    left: 169px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 2px;
+    width: 120px;
+  }
+  
+  .screen .image {
+    height: 45px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 155px;
+  }
+  
+  .screen .text-wrapper-7 {
+    color: #ffffff;
+    font-family: "Noto Sans Inscriptional Pahlavi", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    height: 44px;
+    left: 12px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 129px;
+  }
+  

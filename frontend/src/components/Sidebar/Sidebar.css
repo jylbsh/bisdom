@@ -1,0 +1,55 @@
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: #4A52A7;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  .sidebar .hambarger {
+    margin-top: 80px; /* 上からのマージン */
+    height: 20px; /* 高さを20pxに設定 */
+    width: 20px; /* 幅を20pxに設定 */
+    right: 10%; /* 画面の右端から10%に固定 */
+    object-fit: cover; /* コンテンツの収まり方を指定 */
+    position: absolute; /* サイドバー基準で配置 */
+    top: 0; /* 画面上端に固定 */
+}
+
+  .sidebar h2 {
+    margin-top: 30%;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar ul {
+    margin-top: 45%;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    display: flex; /* 横並び */
+    align-items: left; /* 縦方向の中央揃え */
+    margin: 20px 0;
+    font-size: large;
+  }
+
+  .sidebar ul li img {
+    width: 20px; /* 画像の幅 */
+    height: 20px; /* 画像の高さ */
+    margin-right: 10px; /* 画像とテキスト間のスペース */
+  }
+  
+  .sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .sidebar ul li a:hover {
+    text-decoration: underline;
+  }
+  
