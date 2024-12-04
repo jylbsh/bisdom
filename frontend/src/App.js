@@ -1,8 +1,9 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // React Router‚ğƒCƒ“ƒ|[ƒg
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // React Routerã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆ
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
-import Home from './components/Home/Home'; // ƒz[ƒ€ƒy[ƒWƒRƒ“ƒ|[ƒlƒ“ƒg
+import Home from './components/Home/Home'; // ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+import Chat from './components/Chat/Chat'; // ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 
 function App() {
   return (
@@ -10,11 +11,12 @@ function App() {
       <div className="App">
         <Sidebar />
         <Header />
-        {/* RoutesƒRƒ“ƒ|[ƒlƒ“ƒg‚Åƒ‹[ƒeƒBƒ“ƒOİ’è */}
+        {/* Routesã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã§ãƒ«ãƒ¼ãƒ†ã‚£ãƒ³ã‚°è¨­å®š */}
         <Routes>
-          {/* URLƒpƒX‚É‰‚¶‚Ä•\¦‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg‚ğİ’è */}
+          {/* URLãƒ‘ã‚¹ã«å¿œã˜ã¦è¡¨ç¤ºã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’è¨­å®š */}
           <Route path="/" element={<Home />} />
-          {/* •K—v‚Å‚ ‚ê‚Î‘¼‚ÌRoute‚à’Ç‰Á */}
+          <Route path="/chat" element={<Chat />} />
+          {/* å¿…è¦ã§ã‚ã‚Œã°ä»–ã®Routeã‚‚è¿½åŠ  */}
         </Routes>
       </div>
     </Router>

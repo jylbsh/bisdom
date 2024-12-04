@@ -1,55 +1,71 @@
+/* サイドバーの基本スタイル（デフォルトで表示） */
 .sidebar {
-    width: 200px;
-    height: 100vh;
-    background-color: #4A52A7;
-    color: white;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-
-  .sidebar .hambarger {
-    margin-top: 80px; /* 上からのマージン */
-    height: 20px; /* 高さを20pxに設定 */
-    width: 20px; /* 幅を20pxに設定 */
-    right: 10%; /* 画面の右端から10%に固定 */
-    object-fit: cover; /* コンテンツの収まり方を指定 */
-    position: absolute; /* サイドバー基準で配置 */
-    top: 0; /* 画面上端に固定 */
+  width: 200px; /* 全体幅 */
+  height: 100vh;
+  background-color: #4A52A7;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateX(0); /* 初期状態で表示 */
+  transition: transform 0.3s ease-in-out; /* アニメーション効果 */
+  overflow: hidden; /* 閉じた状態で内容が溢れないように */
 }
 
-  .sidebar h2 {
-    margin-top: 30%;
-    margin-bottom: 20px;
-  }
-  
-  .sidebar ul {
-    margin-top: 45%;
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar ul li {
-    display: flex; /* 横並び */
-    align-items: left; /* 縦方向の中央揃え */
-    margin: 20px 0;
-    font-size: large;
-  }
+/* ハンバーガーボタンのスタイル */
+.hamburger {
+  position: absolute; /* サイドバー内基準で配置 */
+  top: 8%;
+  left: 0.6%; /* 左上に固定（必要なら調整可能） */
+  background-color: transparent; /* 背景を透明に */
+  border: none; /* ボタン枠を非表示 */
+  cursor: pointer;
+  z-index: 1000; /* サイドバーより前面に表示 */
+}
 
-  .sidebar ul li img {
-    width: 20px; /* 画像の幅 */
-    height: 20px; /* 画像の高さ */
-    margin-right: 10px; /* 画像とテキスト間のスペース */
-  }
-  
-  .sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .sidebar ul li a:hover {
-    text-decoration: underline;
-  }
-  
+.hambarger {
+  height: 20px; /* 高さ調整 */
+  width: 20px; /* 幅調整 */
+  object-fit: cover;
+}
+
+.sidebar ul {
+  margin-top: 45%;
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  display: flex; /* 横並び */
+  align-items: center; /* 縦方向の中央揃え */
+  margin: 20px 0;
+  font-size: large;
+}
+
+.sidebar ul li img {
+  width: 20px; /* 画像の幅 */
+  height: 20px; /* 画像の高さ */
+  margin-right: 10px; /* 画像とテキスト間のスペース */
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.sidebar ul li a:hover {
+  text-decoration: underline;
+}
+
+/* サイドバーが閉じているときのスタイル */
+.sidebar.closed {
+  transform: translateX(-180px); /* アイコン部分だけ見えるようにする */
+}
+
+/* サイドバーが閉じたときのアイコン位置調整 */
+.sidebar.closed ul li img {
+  margin-right: 0; /* 余白をなくす */
+  margin-left: auto; /* アイコンを右寄せ */
+}
