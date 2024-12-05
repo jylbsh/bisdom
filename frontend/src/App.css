@@ -25,6 +25,7 @@
 .content-container {
   display: flex;
   flex: 1; /* 残りの高さを全て使う */
+  overflow: hidden; /* 横方向のオーバーフローを防止 */
 }
 
 /* サイドバー */
@@ -36,12 +37,13 @@
   flex-direction: column;
 }
 
-/* メインコンテンツ */
-.main-content {
-  flex: 1; /* 残りの横幅を全て使う */
-  overflow-y: auto; /* 縦スクロール可能 */
-  padding: 20px;
-  background-color: #fff;
+/* メインコンテンツエリア */
+.MainContent {
+  flex: 1; /* 残りのスペースを全て使用 */
+  background-color: #ffffff; /* 背景色を設定 */
+  overflow-y: auto; /* 縦方向のスクロールを有効に */
+  padding: 20px; /* 内側の余白を設定 */
+  margin-left: 50px; /* 左に200pxの余白を設定 */
 }
 
 .App-link {

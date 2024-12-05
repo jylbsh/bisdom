@@ -3,12 +3,12 @@ import './Sidebar.css';
 import { Link } from 'react-router-dom';
 
 import sidebarIcon from '../../assets/image/sidebar.png'; // ハンバーガーボタンの画像
-import s1 from '../../assets/image/home.png'; // サイドバーのアイコン
+import s1 from '../../assets/image/home.png'; 
 import s2 from '../../assets/image/chat.png';
 import s3 from '../../assets/image/bookmark.png';
 
 function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true); // 初期状態は開いている
+  const [isOpen, setIsOpen] = useState(false); // 初期状態は開いている
 
   // サイドバーの開閉状態を切り替える関数
   const toggleSidebar = () => {
@@ -17,14 +17,16 @@ function Sidebar() {
 
   return (
     <div>
-      {/* ハンバーガーボタン */}
-      <button className="hamburger" onClick={toggleSidebar}>
-        <img className="hambarger" src={sidebarIcon} alt="Toggle Sidebar" />
-      </button>
-
       {/* サイドバー */}
       <div className={`sidebar ${isOpen ? '' : 'closed'}`}>
         <ul>
+          <li>
+            {/* ハンバーガーボタン */}
+            <button className="hamburger" onClick={toggleSidebar}>
+              <img src={sidebarIcon} alt="Toggle Sidebar" />
+              {isOpen}
+            </button>
+          </li>
           <li>
             <img src={s1} alt="Home Icon" />
             {isOpen && <Link to="/">ホーム</Link>}

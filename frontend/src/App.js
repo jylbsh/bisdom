@@ -12,12 +12,12 @@ function App() {
         <Sidebar />
         <Header />
         {/* Routesコンポーネントでルーティング設定 */}
-        <Routes>
-          {/* URLパスに応じて表示するコンポーネントを設定 */}
-          <Route path="/" element={<Home />} />
-          <Route path="/chat" element={<Chat />} />
-          {/* 必要であれば他のRouteも追加 */}
-        </Routes>
+        <div className="MainContent">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/chat" element={<Chat />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

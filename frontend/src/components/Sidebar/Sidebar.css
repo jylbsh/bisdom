@@ -1,23 +1,23 @@
-/* サイドバーの基本スタイル（デフォルトで表示） */
+/* サイドバーの基本スタイル（画面下部に固定） */
 .sidebar {
   width: 200px; /* 全体幅 */
-  height: 100vh;
+  height: 95%; /* 画面の高さ全体をカバー */
   background-color: #4A52A7;
   color: white;
   padding: 20px;
   position: fixed;
-  top: 0;
-  left: 0;
-  transform: translateX(0); /* 初期状態で表示 */
+  bottom: 0; /* 画面下部に固定 */
+  left: 0; /* 画面の左端に固定 */
+  transform: translateY(0); /* 初期状態で表示 */
   transition: transform 0.3s ease-in-out; /* アニメーション効果 */
-  overflow: hidden; /* 閉じた状態で内容が溢れないように */
+  overflow: hidden; /* 内容が溢れないように */
 }
 
 /* ハンバーガーボタンのスタイル */
 .hamburger {
   position: absolute; /* サイドバー内基準で配置 */
-  top: 8%;
-  left: 0.6%; /* 左上に固定（必要なら調整可能） */
+  top: 80px;
+  left: 81%; /*左上に固定（必要なら調整可能） */
   background-color: transparent; /* 背景を透明に */
   border: none; /* ボタン枠を非表示 */
   cursor: pointer;
@@ -27,11 +27,11 @@
 .hambarger {
   height: 20px; /* 高さ調整 */
   width: 20px; /* 幅調整 */
-  object-fit: cover;
+  object-fit: cover; 
 }
 
 .sidebar ul {
-  margin-top: 45%;
+  margin-top: 30%;
   list-style: none;
   padding: 0;
 }
