@@ -2,26 +2,48 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* 全体レイアウト */
+.app-container {
   display: flex;
   flex-direction: column;
+  height: 100vh; /* ビューポート全体の高さを使用 */
+  overflow: hidden;
+}
+
+/* ヘッダー */
+.header {
+  flex-shrink: 0;
+  height: 60px; /* 固定高さ */
+  background-color: #333;
+  color: white;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+
+/* サイドバーとメインコンテンツを配置 */
+.content-container {
+  display: flex;
+  flex: 1; /* 残りの高さを全て使う */
+  overflow: hidden; /* 横方向のオーバーフローを防止 */
+}
+
+/* サイドバー */
+.sidebar {
+  width: 200px; /* 固定幅 */
+  background-color: #f4f4f4;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* メインコンテンツエリア */
+.MainContent {
+  flex: 1; /* 残りのスペースを全て使用 */
+  background-color: #ffffff; /* 背景色を設定 */
+  overflow-y: auto; /* 縦方向のスクロールを有効に */
+  padding: 20px; /* 内側の余白を設定 */
+  margin-left: 50px; /* 左に200pxの余白を設定 */
 }
 
 .App-link {
