@@ -12,7 +12,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 0;  /* rectangle‚ğŒã‚ë‚É”z’u */
+  z-index: 0; /* rectangleï¿½ï¿½ï¿½ï¿½ï¿½É”zï¿½u */
 }
 
 .image {
@@ -21,30 +21,33 @@
 }
 
 .image .element {
-  height: 53px;
+  height: 42.4px;
   left: 0;
   object-fit: cover;
-  position: relative;
+  position: fixed;
   z-index: 1;
   top: 0;
-  width: 131px;
+  width: 104.8px;
+  margin: 5px;
+  margin-top: 8px;
 }
 
 .search {
-  height: 53px;  /* search-box‚Ì‚‚³‚É‡‚í‚¹‚Äe—v‘f‚Ì‚‚³‚ğ’²® */
+  height: 53px; /* search-boxï¿½Ìï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½í‚¹ï¿½Äeï¿½vï¿½fï¿½Ìï¿½ï¿½ï¿½ï¿½ğ’²ï¿½ */
   width: 650px;
-  position: fixed;  /* fixed‚Å‰æ–Êã•”‚É”z’u */
-  top: 1%;  /* ã•”‚É”z’u */
-  left: 50%;  /* ‰¡•ûŒü‚Ì’†‰›‚É”z’u */
-  transform: translateX(-50%);  /* •‚Ì”¼•ª‚¾‚¯¶‚ÉƒVƒtƒg‚µ‚Ä’†‰›‚É”z’u */
-  z-index: 10;  /* •K—v‚É‰‚¶‚Ä‘O–Ê‚É•\¦ */
+  position: fixed; /* fixedï¿½Å‰ï¿½Êã•”ï¿½É”zï¿½u */
+  top: 1%; /* ï¿½ã•”ï¿½É”zï¿½u */
+  left: 50%; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½ï¿½É”zï¿½u */
+  transform: translateX(-50%); /* ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉƒVï¿½tï¿½gï¿½ï¿½ï¿½Ä’ï¿½ï¿½ï¿½ï¿½É”zï¿½u */
+  z-index: 10; /* ï¿½Kï¿½vï¿½É‰ï¿½ï¿½ï¿½ï¿½Ä‘Oï¿½Ê‚É•\ï¿½ï¿½ */
 }
 
 .search .search-box {
   background-color: #f2f3ff;
   border-radius: 8px;
   height: 36px;
-  width: 100%;  /* e—v‘f‚É‡‚í‚¹‚Ä‰¡•100%‚É */
+  width: 100%; /* ï¿½eï¿½vï¿½fï¿½Éï¿½ï¿½í‚¹ï¿½Ä‰ï¿½ï¿½ï¿½100%ï¿½ï¿½ */
+  margin-top: 5px;
 }
 
 .search-lens {
@@ -53,12 +56,13 @@
 }
 
 .search-lens .element {
-  height: 20px;
-  left: 1%;
+  height: 15px;
+  left: 2%;
   object-fit: cover;
   position: fixed;
   top: 15%;
-  width: 20px;
+  width: 15px;
+  margin-top: 7px;
 }
 
 .search-mixer {
@@ -67,12 +71,13 @@
 }
 
 .search-mixer .element {
-  height: 20px;
+  height: 15px;
   left: 95%;
   object-fit: cover;
   position: fixed;
   top: 15%;
-  width: 20px;
+  width: 15px;
+  margin-top: 7px;
 }
 
 .user {
@@ -83,10 +88,11 @@
 .user .element {
   background-color: #d9d9d9;
   border-radius: 25px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   left: 95%;
   object-fit: cover;
   position: fixed;
   top: 5px;
-  width: 50px;
+  margin: 5px;
 }
