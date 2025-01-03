@@ -2,18 +2,31 @@ body {
   overflow: hidden;
 }
 
+.narrage-list {
+  color: white;
+  background-color: #a3abff;
+  width: 150px;
+  height: 30px;
+  margin-left: 20px;
+  margin-bottom: 0px;
+  margin-top: 5px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* �S�̃R���e�i */
 .home-container {
   background-color: #e5e5e5;
   color: black;
   padding: 20px;
   width: 800px;
-  height: 500px;
+  height: 480px;
   overflow: auto;
-  margin-top: 30px;
+  margin-top: 0px;
   margin-left: 20px;
   margin-bottom: 30px;
-  border-radius: 5px;
   overflow: auto;
 }
 
@@ -55,6 +68,19 @@ body {
   width: 100px;
   height: 40px;
   padding: 10px;
+  background-color: #4a52a7;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  float: left;
+}
+
+.delete-button:hover {
+  margin: 20px;
+  width: 100px;
+  height: 40px;
+  padding: 10px;
   background-color: #a3abff;
   color: white;
   border: none;
@@ -68,7 +94,7 @@ body {
   width: 100px;
   height: 40px;
   padding: 10px;
-  background-color: #4a52a7;
+  background-color: #282e75;
   color: white;
   border: none;
   font-weight: bold;

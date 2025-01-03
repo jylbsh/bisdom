@@ -48,18 +48,21 @@ function Home() {
   }, []); // 空の依存配列で初回レンダリング時のみ実行
 
   return (
-    <div className="home-container">
-      {items.map((item, index) => (
-        <div key={index} className="item-row">
-          <div className="tab-content">
-            <div>{item}</div>
+    <>
+      <div className="narrage-list">ナレッジリスト</div>
+      <div className="home-container">
+        {items.map((item, index) => (
+          <div key={index} className="item-row">
+            <div className="tab-content">
+              <div>{item}</div>
+            </div>
+            <div>
+              <button class="delete-button">削除</button>
+            </div>
           </div>
-          <div>
-            <button class="delete-button">削除</button>
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }
 
