@@ -1,2 +1,4 @@
 # .gitignore
 __pycache__/
+test_data/__pycache__/
+model/__pycache__/
