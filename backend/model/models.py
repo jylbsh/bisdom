@@ -90,7 +90,6 @@ class Knowledge(db.Model):
     visibility = db.Column(db.String, nullable=False, default="private", comment="公開範囲")
     visible_to_groups = db.Column(db.JSON, nullable=True, default=[], comment="公開先グループ")
     tags = db.Column(db.JSON, nullable=False, default=[], comment="ナレッジのタグ")
-    image_path = db.Column(db.JSON, nullable=True, default=[], comment="画像パス")
     links = db.Column(db.JSON, nullable=True, default=[], comment="ナレッジに埋め込まれているリンク")
     editors = db.Column(db.JSON, nullable=False, default=[], comment="共同編集者")
     viewer_count = db.Column(db.Integer, nullable=False, default=0, comment="閲覧数")
