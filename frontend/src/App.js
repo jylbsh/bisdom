@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 import Home from './components/Home/Home'; // ホームページコンポーネント
 import Chat from './components/Chat/Chat'; // ホームページコンポーネント
+import Delete from './components/Delete/Delete';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/delete" element={<Delete />} />
           </Routes>
         </div>
       </div>

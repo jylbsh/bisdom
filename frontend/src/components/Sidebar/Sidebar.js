@@ -6,6 +6,8 @@ import sidebarIcon from '../../assets/image/sidebar.png'; // ハンバーガー�
 import s1 from '../../assets/image/home.png'; 
 import s2 from '../../assets/image/chat.png';
 import s3 from '../../assets/image/bookmark.png';
+import s4 from '../../assets/image/admin.png';
+import s5 from '../../assets/image/delete.png';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false); // 初期状態は開いている
@@ -40,8 +42,12 @@ function Sidebar() {
             {isOpen && <Link to="/favorite">ブックマーク</Link>}
           </li>
           <li>
-            <img src={s2} alt="Admin Icon" />
+            <img src={s4} alt="Admin Icon" />
             {isOpen && <Link to="/admin">管理者機能</Link>}
+          </li>
+          <li>
+            <img src={s5} alt="Delete Icon" />
+            {isOpen && <Link to="/delete">投稿削除</Link>}
           </li>
         </ul>
       </div>
