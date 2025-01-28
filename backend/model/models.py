@@ -1,6 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from init import db
 
 class Users(db.Model):
     __tablename__ = 'users'
@@ -73,8 +71,8 @@ class Knowledge(db.Model):
     update_at = db.Column(db.String, nullable=False, default="(システム日時)", comment="レコード更新日時")
     update_by = db.Column(db.String, nullable=False, comment="レコード更新者")
     version = db.Column(db.Integer, nullable=False, default=0, comment="更新回数")
-    _ts = db.Column(db.Integer, nullable=False, comment="CosmosDBの内部タイムスタンプ")
-    _etag = db.Column(db.String, nullable=False, comment="CosmosDBの排他制御トークン")
+    _ts = db.Column(db.Integer, nullable=False,default=0, comment="CosmosDBの内部タイムスタンプ")
+    _etag = db.Column(db.String, nullable=False,default="", comment="CosmosDBの排他制御トークン")
 
     # 論理削除関連
     is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="論理削除フラグ")
@@ -86,10 +84,12 @@ class Knowledge(db.Model):
     type = db.Column(db.String, nullable=False, default="knowledge", comment="ドキュメントタイプ (固定値)")
     title = db.Column(db.String, nullable=False, comment="ナレッジのタイトル")
     content = db.Column(db.String, nullable=False, comment="ナレッジの本文")
-    author_id = db.Column(db.String, nullable=False, comment="ナレッジ作成者")
+    #       ユーザーIDをパーティションキーにする？
+    author_id = db.Column(db.String, nullable=False, comment="ナレッジ作成者(パーティションキー)")
     visibility = db.Column(db.String, nullable=False, default="private", comment="公開範囲")
     visible_to_groups = db.Column(db.JSON, nullable=True, default=[], comment="公開先グループ")
     tags = db.Column(db.JSON, nullable=False, default=[], comment="ナレッジのタグ")
+    image_path = db.Column(db.JSON, nullable=True, default=[], comment="画像パス")
     links = db.Column(db.JSON, nullable=True, default=[], comment="ナレッジに埋め込まれているリンク")
     editors = db.Column(db.JSON, nullable=False, default=[], comment="共同編集者")
     viewer_count = db.Column(db.Integer, nullable=False, default=0, comment="閲覧数")
@@ -97,4 +97,8 @@ class Knowledge(db.Model):
 
     def __repr__(self):
         return f"<Knowledge {self.id} - {self.title}>"
-
+    
+    def to_dict(self):
+        keys = [column for column in self.__dict__ if not column.startswith("_")]
+        item = [getattr(self,key) for key in keys ]
+        return dict(zip(keys,item))
