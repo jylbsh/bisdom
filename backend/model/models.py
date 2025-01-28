@@ -34,6 +34,7 @@ class Users(db.Model):
     # その他
     affiliation = db.Column(db.JSON, nullable=True, default=[], comment="所属グループの配列 (例: ['営業', 'admin'])")
     last_login_at = db.Column(db.String, nullable=True, comment="最後にログインした日時 (ISO 8601形式)")
+    likes = db.relationship('Like', back_populates='user', lazy=True)
 
     def __repr__(self):
         return f"<User {self.id} - {self.name}>"
@@ -95,7 +96,19 @@ class Knowledge(db.Model):
     editors = db.Column(db.JSON, nullable=False, default=[], comment="共同編集者")
     viewer_count = db.Column(db.Integer, nullable=False, default=0, comment="閲覧数")
     bookmark_count = db.Column(db.Integer, nullable=False, default=0, comment="ブックマーク数")
+    likes = db.relationship('Like', back_populates='knowledge', lazy=True)
 
     def __repr__(self):
         return f"<Knowledge {self.id} - {self.title}>"
 
+# Like model to track user-blogpost likes
+class Like(db.Model):
+    __tablename__ = 'like'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    knowledge_id = db.Column(db.Integer, db.ForeignKey('knowledge.id'), primary_key=True)
+    user = db.relationship('Users', back_populates='likes')
+    knowledge = db.relationship('Knowledge', back_populates='likes')
+
+    def __repr__(self):
+        return f"<Likes {self.user_id} - {self.knowledge_id}>"

@@ -1,68 +1,49 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS  # CORSをインポート
-from database import db_connect
-from model.models import db, Users, Group, Knowledge
+import csv
+from io import StringIO
+from flask import Flask, jsonify, make_response, request
+from flask_cors import CORS
+import requests  # CORSをインポート
+from database import db_connect, db_insert_test_data
+from model.models import db, Users, Group, Knowledge, Like
 
-from test_data.users_data1 import test_users
+from test_data.knowledge_data1 import test_knowledge
 
 # Flaskアプリケーションの初期化
 app = Flask(__name__)
 
 # DBを起動する
 db_connect(app)
+#db_insert_test_data(app)
 
 # CORSを有効化
 CORS(app)
 
 @app.route('/', methods=['GET'])
 def index():
-    return "{Getリクエストを正常に受信しました。}"
+    #send_like_request()
+    return "nothing"
 
-# データを追加するエンドポイント
-@app.route('/database/users/post', methods=['POST'])
-def add_user():
-    db.session.add_all(test_users)
-    db.session.commit()
-    return jsonify({'message': 'User added successfully'})
+#Knowledge Download API using knowledge_id
+@app.route('/downloadKnowledge/<knowledge_id>', methods=['GET'])
+def downloadKnowledge(knowledge_id):
+    #指定されたナレッジの検索
+    knowledge = Knowledge.query.get(knowledge_id)
 
-# データを取得するエンドポイント
-@app.route('/database/users/get', methods=['GET'])
-def get_users():
-    try:
-        # データベースから全てのユーザーを取得
-        users = Users.query.all()
+    #ナレッジ検索失敗のとき
+    if not knowledge:
+        return jsonify({"error": "Knowledge not found" + " [" + knowledge_id + "]"}), 404
+    
+    #CSVデータの出力準備
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['id','type','title','content','author_id'])
+    writer.writerow([knowledge.id, knowledge.type, knowledge.title, knowledge.content, knowledge.author_id])
 
-        # ユーザーを辞書形式に変換
-        users_list = [
-            {
-                "create_at": user.create_at,
-                "create_by": user.create_by,
-                "update_at": user.update_at,
-                "update_by": user.update_by,
-                "version": user.version,
-                "_ts": user._ts,
-                "_etag": user._etag,
-                "is_deleted": user.is_deleted,
-                "deleted_at": user.deleted_at,
-                "deleted_by": user.deleted_by,
-                "id": user.id,
-                "type": user.type,
-                "name": user.name,
-                "display_name": user.display_name,
-                "email": user.email,
-                "password_hash": user.password_hash,
-                "storage_quota": user.storage_quota,
-                "storage_used": user.storage_used,
-                "affiliation": user.affiliation,
-                "last_login_at": user.last_login_at
-            }
-            for user in users
-        ]
-
-        # JSONで返却
-        return jsonify(users_list), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    res = make_response()
+    res.data = output.getvalue()
+    res.headers['Content-Type'] = 'text/csv'
+    res.headers['Content-Disposition'] = 'attachment; filename=knowledge_'+ knowledge_id +'.csv'
+    return res
 
 if __name__ == '__main__':
     app.debug = True
