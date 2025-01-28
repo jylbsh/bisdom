@@ -67,6 +67,9 @@ function Home() {
           <div>
             <h2>自投稿</h2>
             <p>ここに自分の投稿内容が表示されます。</p>
+            <p>以下はテスト用のリンク一覧です</p>
+            <li><a href="http://localhost:3000/chat">チャット画面</a></li>
+            <li><a href="http://localhost:3000/deleteknowledge">ナレッジ削除画面</a></li>
           </div>
         )}
       </div>
