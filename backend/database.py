@@ -1,4 +1,4 @@
-from model.models import db, Users, Group, Knowledge
+from model.models import db, Users, Group, Knowledge, Like
 
 def db_connect(app):
     # 設定ファイルの読み込み
