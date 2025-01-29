@@ -30,23 +30,33 @@ function Sidebar() {
             </button>
           </li>
           <li>
-            <img src={s1} alt="Home Icon" />
+            <button className='sidebar-button' onClick={() => window.location.href = '/'}>
+              <img src={s1} alt="Home Icon" />
+            </button>
             {isOpen && <Link to="/">ホーム</Link>}
           </li>
           <li>
-            <img src={s2} alt="Chat Icon" />
+            <button className="sidebar-button" onClick={() => window.location.href = '/chat'}>
+              <img src={s2} alt="Chat Icon" />
+            </button>
             {isOpen && <Link to="/chat">AIチャット</Link>}
           </li>
           <li>
-            <img src={s3} alt="Bookmark Icon" />
+            <button className="sidebar-button" onClick={() => window.location.href = '/favorite'}>
+              <img src={s3} alt="Bookmark Icon" />
+            </button>
             {isOpen && <Link to="/favorite">ブックマーク</Link>}
           </li>
           <li>
-            <img src={s4} alt="Admin Icon" />
+            <button className="sidebar-button" onClick={() => window.location.href = '/favorite'}>
+              <img src={s4} alt="Admin Icon" />
+            </button>
             {isOpen && <Link to="/admin">管理者機能</Link>}
           </li>
           <li>
-            <img src={s5} alt="Delete Icon" />
+            <button className="sidebar-button" onClick={() => window.location.href = '/delete'}>
+              <img src={s5} alt="Delete Icon" />
+            </button>
             {isOpen && <Link to="/delete">投稿削除</Link>}
           </li>
         </ul>

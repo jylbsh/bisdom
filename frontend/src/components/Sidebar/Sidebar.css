@@ -30,6 +30,11 @@
   object-fit: cover; 
 }
 
+.sidebar-button{
+  background-color: transparent; /* 背景を透明に */
+  border: none; /* ボタン枠を非表示 */
+}
+
 .sidebar ul {
   margin-top: 30%;
   list-style: none;
@@ -47,6 +52,12 @@
   width: 20px; /* 画像の幅 */
   height: 20px; /* 画像の高さ */
   margin-right: 10px; /* 画像とテキスト間のスペース */
+}
+
+.sidebar ul li .sidebar-button {
+  width: 20px; /* 画像の幅 */
+  height: 20px; /* 画像の高さ */
+  margin-right: 20px; /* 画像とテキスト間のスペース */
 }
 
 .sidebar ul li a {
@@ -67,5 +78,10 @@
 /* サイドバーが閉じたときのアイコン位置調整 */
 .sidebar.closed ul li img {
   margin-right: 0; /* 余白をなくす */
+  margin-left: auto; /* アイコンを右寄せ */
+}
+
+.sidebar.closed ul li button {
+  margin-right: 6px; /* 余白をなくす */
   margin-left: auto; /* アイコンを右寄せ */
 }
