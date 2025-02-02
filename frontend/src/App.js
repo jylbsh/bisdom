@@ -6,22 +6,30 @@ import Home from './components/Home/Home'; // ホームページコンポーネ�
 import Chat from './components/Chat/Chat'; // ホームページコンポーネント
 import DeleteKnowledge from './components/DeleteKnowledge/DeleteKnowledge'; // ホームページコンポーネント
 
+import Login from './components/Login/Login';
+import { Layout } from './components/Layout/Layout';
+import { AuthProvider } from './components/Auth/AuthContext';
+import PrivateRoute from './components/Auth/PrivateRoute';
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <div className="App">
-        <Sidebar />
-        <Header />
+        <Layout />
         {/* Routesコンポーネントでルーティング設定 */}
         <div className="MainContent">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/deleteknowledge" element={<DeleteKnowledge />} />
+            <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+            <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
+            <Route path="/login" element={<Login/>}/>
           </Routes>
         </div>
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 
