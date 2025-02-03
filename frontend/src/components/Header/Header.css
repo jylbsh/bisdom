@@ -1,7 +1,9 @@
 .box {
   height: 60px;
-  width: 100%;
   z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 5vw;
 }
 
 .box .rectangle {
@@ -81,6 +83,8 @@
 }
 
 .user {
+  z-index: 1;
+  border-radius: 99%;
   height: 50px;
   width: 50px;
 }

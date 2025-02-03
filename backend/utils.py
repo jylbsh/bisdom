@@ -2,13 +2,17 @@ import bleach
 from datetime import datetime
 from typing import Tuple
 from init import db
-from model.models import Knowledge
+from model.models import Knowledge,Users
 from messages import CreateBy,ErrorMessages
 from common_decorator import transactional
 from common_type import Model 
 from collections import defaultdict
 import uuid
 
+def get_all_users() -> list[Users]:
+    return Users.query.all()
+def get_user_by_id(id:str) -> Users|None:
+    return Users.query.filter_by(id=id).first()
 def get_knowledge_by_id(id:int) -> Knowledge:
     return Knowledge.query.get({"id":id})
 
@@ -104,6 +108,6 @@ def sanitize_quill_html(content:str|None) -> Tuple[str,int]:
         return "",99
     return sanitized_html,0
 if __name__ == "__main__":
-    print(CreateBy.SYSTEM)
-    print(ErrorMessages.ERROR_ID_001E.value.id)
-    print(messeage_generator(ErrorMessages.ERROR_ID_008E,"私"))
+    from werkzeug.security import generate_password_hash
+    print(test:=generate_password_hash("test01"))
+    print("?>?")

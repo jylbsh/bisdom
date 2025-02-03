@@ -6,7 +6,7 @@ function Home() {
   const [activeTab, setActiveTab] = useState("timeline");
   // messageをuseStateで管理
   const [message, setMessage] = useState(""); 
-
+  const authToken = localStorage.getItem("authToken");
   // タブ切り替え関数
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -15,7 +15,11 @@ function Home() {
   const fetchData = async () => {
     try {
       const response = await fetch("http://127.0.0.1:8080/", {
-        method: 'GET'
+        method: 'GET',
+        headers:{
+          'Authorization':'Bearer ' + authToken,
+          'Content-Type': 'application/json',
+        }
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
