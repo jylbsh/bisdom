@@ -1,0 +1,117 @@
+body {
+    overflow: hidden;
+  }
+  
+  .narrage-list {
+    color: white;
+    background-color: #a3abff;
+    width: 150px;
+    height: 30px;
+    margin-left: 20px;
+    margin-bottom: 0px;
+    margin-top: 5px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* ?S??R???e?i */
+  .delete-container {
+    background-color: #e5e5e5;
+    color: black;
+    padding: 10px;
+    width: 850px;
+    height: 450px;
+    overflow: auto;
+    margin-top: 0px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+    overflow: auto;
+  }
+  
+  /* ?^?u?w?b?_?[ */
+  .tab-header {
+    display: flex;
+    border-bottom: 1px solid gray;
+  }
+  
+  /* ?^?u?{?^?? */
+  .tab-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #f2f3ff;
+    border: none;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .tab-button.active {
+    background-color: #a3abff; /* ?A?N?e?B?u??^?u??w?i?F */
+  }
+  
+  .narrage-title {
+    margin: 10px;
+    width: 500px;
+    height: 20px;
+    padding: 10px;
+    padding-bottom: 10px;
+    background-color: white;
+    border-radius: 5px;
+    text-align: left;
+    float: left;
+  }
+  
+  .delete-button {
+    margin: 10px;
+    width: 100px;
+    height: 40px;
+    padding: 10px;
+    background-color: #4a52a7;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    float: left;
+  }
+  
+  .delete-button:hover {
+    margin: 10px;
+    width: 100px;
+    height: 40px;
+    padding: 10px;
+    background-color: #a3abff;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    float: left;
+  }
+  
+  .delete-button:active {
+    margin: 10px;
+    width: 100px;
+    height: 40px;
+    padding: 10px;
+    background-color: #282e75;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    float: left;
+  }
+
+  .detail-button {
+    margin: 10px;
+    margin-right: 30px;
+    width: 100px;
+    height: 40px;
+    padding: 10px;
+    background-color: white;
+    color: #4a52a7;
+    border: 1px solid#4a52a7;
+    font-weight: bold;
+    border-radius: 5px;
+    float: left;
+  }

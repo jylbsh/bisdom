@@ -4,7 +4,7 @@ import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 import Home from './components/Home/Home'; // ホームページコンポーネント
 import Chat from './components/Chat/Chat'; // ホームページコンポーネント
-import DeleteKnowledge from './components/DeleteKnowledge/DeleteKnowledge'; // ホームページコンポーネント
+import Delete from './components/Delete/Delete';
 
 import Login from './components/Login/Login';
 import { Layout } from './components/Layout/Layout';
@@ -25,6 +25,7 @@ function App() {
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
             <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
             <Route path="/login" element={<Login/>}/>
+            <Route path="/delete" element={<Delete />} />
           </Routes>
         </div>
       </div>

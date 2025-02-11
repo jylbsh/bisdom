@@ -6,6 +6,8 @@ import sidebarIcon from '../../assets/image/sidebar.png'; // ハンバーガー�
 import s1 from '../../assets/image/home.png'; 
 import s2 from '../../assets/image/chat.png';
 import s3 from '../../assets/image/bookmark.png';
+import s4 from '../../assets/image/admin.png';
+import s5 from '../../assets/image/delete.png';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false); // 初期状態は開いている
@@ -28,20 +30,34 @@ function Sidebar() {
             </button>
           </li>
           <li>
-            <img src={s1} alt="Home Icon" />
+            <button className='sidebar-button' onClick={() => window.location.href = '/'}>
+              <img src={s1} alt="Home Icon" />
+            </button>
             {isOpen && <Link to="/">ホーム</Link>}
           </li>
           <li>
-            <img src={s2} alt="Chat Icon" />
+            <button className="sidebar-button" onClick={() => window.location.href = '/chat'}>
+              <img src={s2} alt="Chat Icon" />
+            </button>
             {isOpen && <Link to="/chat">AIチャット</Link>}
           </li>
           <li>
-            <img src={s3} alt="Bookmark Icon" />
+            <button className="sidebar-button" onClick={() => window.location.href = '/favorite'}>
+              <img src={s3} alt="Bookmark Icon" />
+            </button>
             {isOpen && <Link to="/favorite">ブックマーク</Link>}
           </li>
           <li>
-            <img src={s2} alt="Admin Icon" />
+            <button className="sidebar-button" onClick={() => window.location.href = '/favorite'}>
+              <img src={s4} alt="Admin Icon" />
+            </button>
             {isOpen && <Link to="/admin">管理者機能</Link>}
+          </li>
+          <li>
+            <button className="sidebar-button" onClick={() => window.location.href = '/delete'}>
+              <img src={s5} alt="Delete Icon" />
+            </button>
+            {isOpen && <Link to="/delete">投稿削除</Link>}
           </li>
         </ul>
       </div>
