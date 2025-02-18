@@ -1,10 +1,11 @@
-from init import app,db,jwt
-import api
+from init import app,db
+import chatbotBaseAI
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True, port=8080)
+    chatbotBaseAI.start_chat()
 
 
 #デバッグモードTrueにすると変更が即反映される
