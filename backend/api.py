@@ -20,7 +20,7 @@ def custom_unauthorized_error(error):
     }), 403
 
 @jwt.expired_token_loader
-def custom_expired_token_error(error):
+def custom_expired_token_error(error, jwt_payload):
     return jsonify({
         'msg': 'The token has expired. Please log in again.'
     }), 402
@@ -30,6 +30,13 @@ def custom_invalid_token_error(error):
     return jsonify({
         'msg': 'The token is invalid. Please check your credentials.'
     }), 404
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header, jwt_payload):
+    return jsonify({
+        "msg": "Token has expired, please refresh your session"
+    }), 401
+
 @app.route('/')
 @jwt_required()
 def index():
@@ -56,6 +63,7 @@ def logout():
     response = jsonify({"msg": "Logout successful"})
     unset_jwt_cookies(response)
     return response, 200
+
 @app.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
 def refresh():

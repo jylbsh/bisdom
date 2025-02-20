@@ -7,7 +7,7 @@ body {
     background-color: #a3abff;
     width: 150px;
     height: 30px;
-    margin-left: 20px;
+    margin-left: 10%;
     margin-bottom: 0px;
     margin-top: 5px;
     padding: 5px;
@@ -25,7 +25,7 @@ body {
     height: 450px;
     overflow: auto;
     margin-top: 0px;
-    margin-left: 20px;
+    margin-left: 10%;
     margin-bottom: 30px;
     overflow: auto;
   }
