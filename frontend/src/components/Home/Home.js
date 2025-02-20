@@ -74,6 +74,8 @@ function Home() {
             <p>以下はテスト用のリンク一覧です</p>
             <li><a href="http://localhost:3000/chat">チャット画面</a></li>
             <li><a href="http://localhost:3000/delete">ナレッジ削除画面</a></li>
+            <li><a href="http://localhost:3000/writeknowledge">ナレッジ作成画面</a></li>
+            <li><a href="http://localhost:3000/writeknowledge/update">ナレッジ更新画面</a></li>
           </div>
         )}
       </div>
