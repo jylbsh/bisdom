@@ -249,6 +249,28 @@ def get_knowledge_meisai():
 @app.route('/chat', methods=['POST'])
 def chat():
     user_input = request.json['message']
+
+#Knowledge Download API using knowledge_id
+@app.route('/downloadKnowledge/<knowledge_id>', methods=['GET'])
+def downloadKnowledge(knowledge_id):
+    #指定されたナレッジの検索
+    knowledge = Knowledge.query.get(knowledge_id)
+
+    #ナレッジ検索失敗のとき
+    if not knowledge:
+        return jsonify({"error": "Knowledge not found" + " [" + knowledge_id + "]"}), 404
+    
+    #CSVデータの出力準備
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['id','type','title','content','author_id'])
+    writer.writerow([knowledge.id, knowledge.type, knowledge.title, knowledge.content, knowledge.author_id])
+
+    res = make_response()
+    res.data = output.getvalue()
+    res.headers['Content-Type'] = 'text/csv'
+    res.headers['Content-Disposition'] = 'attachment; filename=knowledge_'+ knowledge_id +'.csv'
+    return res
     
     # Get a response from the model
     response = chatbotBaseAI.apiChat(user_input)
