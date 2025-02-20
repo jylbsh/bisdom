@@ -1,15 +1,18 @@
+import os
+import requests
+import csv
+from io import StringIO
 from init import app,db,jwt
 from common_exception import TransactionException
 from werkzeug.security import generate_password_hash,check_password_hash
-from flask import  jsonify, request
+from flask import jsonify, request, make_response
 from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required, \
     get_jwt_identity,set_refresh_cookies,unset_jwt_cookies,unset_access_cookies
-import os
 
 from utils import add_new_knowledge,get_knowledge_by_id,update_knowledge,get_user_by_id
-from model.models import Users, Group, Knowledge
 import messages
 import chatbotBaseAI
+from model.models import db, Users, Group, Knowledge, Like
 
 with app.app_context():
     db.create_all()
@@ -275,3 +278,62 @@ def downloadKnowledge(knowledge_id):
     # Get a response from the model
     response = chatbotBaseAI.apiChat(user_input)
     return jsonify({'response': response})
+
+#knowledge like API
+@app.route('/likeKnowledge', methods=['POST'])
+def likeKnowledge():
+    user_id = request.json.get('user_id')
+    knowledge_id = request.json.get('knowledge_id')
+
+    if not user_id or not knowledge_id:
+        return jsonify({"error": "Missing user_id or knowledge_id"}), 400
+
+    # Check if the blog post exists
+    knowledge = Knowledge.query.get(knowledge_id)
+    if not knowledge:
+        return jsonify({"error": "Knowledge not found"}), 404
+
+    # Check if the user exists
+    user = Users.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Check if the user has already liked this blog post
+    existing_like = Like.query.filter_by(user_id=user_id, knowledge_id=knowledge_id).first()
+
+    if existing_like:
+        # If the like already exists, remove it (unlike the post)
+        db.session.delete(existing_like)
+        db.session.commit()
+        return jsonify({"message": "Knowledge unliked successfully"}), 200
+    else:
+        # If the like doesn't exist, add it
+        new_like = Like(user_id=user_id, knowledge_id=knowledge_id)
+        db.session.add(new_like)
+        db.session.commit()
+        return jsonify({"message": "Knowledge liked successfully"}), 200
+    
+@app.route('/countKnowledgeLikes/<knowledge_id>', methods=['GET'])
+def countKnowledgeLikes(knowledge_id):
+    knowledge = Knowledge.query.get(knowledge_id)
+    if not knowledge:
+        return jsonify({"error": "Knowledge not found"}), 404
+
+    likes_count = Like.query.filter_by(knowledge_id=knowledge_id).count()
+    return jsonify({"likes_count": likes_count}), 200
+
+def send_like_request():
+    url = 'http://127.0.0.1:8080/likeKnowledge'
+    data = {"user_id": "U0001", "knowledge_id": "1"}
+    
+    try:
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
+            print("Successfully liked the knowledge!")
+            print("Response:", response.json())  # Print the response content
+        else:
+            print(f"Failed to like the knowledge. Status Code: {response.status_code}")
+            print("Response:", response.text)
+
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
