@@ -9,6 +9,7 @@ import os
 from utils import add_new_knowledge,get_knowledge_by_id,update_knowledge,get_user_by_id
 from model.models import Users, Group, Knowledge
 import messages
+import chatbotBaseAI
 
 with app.app_context():
     db.create_all()
@@ -244,3 +245,11 @@ def get_knowledge_meisai():
         return jsonify(knowledge_data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    user_input = request.json['message']
+    
+    # Get a response from the model
+    response = chatbotBaseAI.apiChat(user_input)
+    return jsonify({'response': response})
