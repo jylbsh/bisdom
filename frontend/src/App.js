@@ -19,12 +19,10 @@ function App() {
         {/* Routesコンポーネントでルーティング設定 */}
         <div className="MainContent">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/chat" element={<Chat />} />
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
             <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
+            <Route path="/delete" element={<PrivateRoute><Delete /></PrivateRoute>} />
             <Route path="/login" element={<Login/>}/>
-            <Route path="/delete" element={<Delete />} />
           </Routes>
         </div>
       </div>
