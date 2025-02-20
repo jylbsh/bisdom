@@ -99,11 +99,7 @@ class Knowledge(db.Model):
 
     def __repr__(self):
         return f"<Knowledge {self.id} - {self.title}>"
-    
-    def to_dict(self):
-        keys = [column for column in self.__dict__ if not column.startswith("_")]
-        item = [getattr(self,key) for key in keys ]
-        return dict(zip(keys,item))
+
 # Like model to track user-blogpost likes
 class Like(db.Model):
     __tablename__ = 'like'

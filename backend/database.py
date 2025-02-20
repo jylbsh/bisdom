@@ -1,4 +1,4 @@
-from model.models import db, Users, Group, Knowledge
+from model.models import db, Users, Group, Knowledge, Like
 from test_data.knowledge_data1 import test_knowledge
 
 def db_connect(app):
