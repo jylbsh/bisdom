@@ -1,11 +1,12 @@
 import os
 import requests
 import csv
+from datetime import datetime
 from io import StringIO
 from init import app,db,jwt
 from common_exception import TransactionException
 from werkzeug.security import generate_password_hash,check_password_hash
-from flask import jsonify, request, make_response
+from flask import Blueprint, jsonify, request, make_response
 from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required, \
     get_jwt_identity,set_refresh_cookies,unset_jwt_cookies,unset_access_cookies
 
@@ -337,3 +338,34 @@ def send_like_request():
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
+
+@app.route('/knowledge/<string:knowledge_id>', methods=['DELETE'])
+def delete_knowledge(knowledge_id):
+    """
+    ナレッジの論理削除を行うエンドポイント
+    URL: DELETE /knowledge/<knowledge_id>
+    
+    リクエストJSON例:
+    {
+        "deleted_by": "削除実行者のID"
+    }
+    """
+    try:
+        # 論理削除していない対象ナレッジを取得
+        knowledge = Knowledge.query.filter_by(id=knowledge_id, is_deleted=False).first()
+        if not knowledge:
+            return jsonify({"message": "対象のナレッジが見つかりませんでした"}), 404
+
+        # ナレッジを論理削除するために状態を更新
+        knowledge.is_deleted = True
+        knowledge.deleted_at = datetime.now().isoformat()
+        # リクエストの JSON から削除者の情報を取得、存在しなければ 'anonymous' を設定
+        deleted_by = request.json.get('deleted_by', 'anonymous')
+        knowledge.deleted_by = deleted_by
+
+        db.session.commit()
+        return jsonify({"message": "ナレッジの削除に成功しました", "knowledge_id": knowledge_id}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": f"エラーが発生しました: {e}"}), 500
