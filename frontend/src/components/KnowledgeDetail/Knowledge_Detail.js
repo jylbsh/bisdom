@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import "./Knowledge_Detail.css"; // 外部CSSファイルをインポート
 
 function Knowledge_Detail() {
     // 現在選択されているタブを管理
     const [activeTab, setActiveTab] = useState("timeline");
     const [knowledgeData, setKnowledgeData] = useState(null);
+    const location = useLocation();
 
     // タブ切り替え関数
     const handleTabChange = (tab) => {
@@ -23,9 +25,13 @@ function Knowledge_Detail() {
     };
     
     useEffect(() => {
-        // データを取得する関数
-        fetchKnowledgeData();
-    }, []);
+        // location.state に渡された knowledgeData があれば、それを利用し、なければAPIリクエストを行う
+        if (location.state && location.state.knowledgeData) {
+            setKnowledgeData(location.state.knowledgeData);
+        } else {
+            fetchKnowledgeData();
+        }
+    }, [location.state]);
 
     // 知識データがまだない場合は、ローディング中のメッセージを表示
     if (!knowledgeData) {
