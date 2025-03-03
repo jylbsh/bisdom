@@ -9,9 +9,11 @@ import x3 from '../../assets/image/mixer.png';
 import x4 from '../../assets/image/user.png';
 import UserAvatar from '../Avatar/Avatar';
 import request from '../Request-manage/request';
+import SearchMixer from './SearchMixer';
 
 const Header = () => {
   const [searchText, setSearchText] = useState('');
+  const [showFlow, setShowFlow] = useState(false); // ポップアップ表示用 state
   const navigate = useNavigate();
 
   // 入力ボックスの値が変更されたときに呼ばれるハンドラ
@@ -33,12 +35,19 @@ const Header = () => {
     }
   };
 
+  // search-mixer をクリックしたときのハンドラ（ポップアップの表示切替）
+  const handleFlowToggle = () => {
+    setShowFlow(!showFlow);
+  };
+
   return (
     <div className="box">
       <div className="rectangle" />
       <div className="image">
         <img className="element" alt="Element" src={x1} />
       </div>
+{/* search-wrapper を追加 */}
+      <div className="search-wrapper" style={{ position: 'relative' }}>
       <div className="search">
         <div className="search-box">
           <input 
@@ -52,15 +61,22 @@ const Header = () => {
         <div className="search-lens" onClick={handleSearch} style={{ cursor: 'pointer' }}>
           <img className="element" alt="Element" src={x2} />
         </div>
-        <div className="search-mixer">
+        <div 
+          className="search-mixer" 
+          onClick={handleFlowToggle} 
+          style={{ cursor: 'pointer' }}
+        >
           <img className="element" alt="Element" src={x3} />
         </div>
+</div>
+        {/* SearchMixer を検索バー直下に配置 */}
+        <SearchMixer visible={showFlow} onClose={() => setShowFlow(false)} />
       </div>
       <div className="user">
         <UserAvatar />
       </div>
-    </div>
+          </div>
   );
-}
+};
 
 export default Header;

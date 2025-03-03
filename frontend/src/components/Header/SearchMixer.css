@@ -1,0 +1,55 @@
+.flow-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.flow-popup-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-mixer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* 表示部分全体を覆い隠す */
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.search-mixer-modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  max-height: 600px;
+  width: 90%;
+  height: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* 初期状態は表示（不透明）、0にすると透明になる */
+  opacity: 1;
+  /* transition: opacity 0.3s ease; */
+}
+
+/* オーバーレイ部分にマウスホバーしたらモーダルを表示 */
+/* .search-mixer-overlay:hover .search-mixer-modal {
+  opacity: 1;
+} */
