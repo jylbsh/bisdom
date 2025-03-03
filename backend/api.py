@@ -369,3 +369,12 @@ def delete_knowledge(knowledge_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": f"エラーが発生しました: {e}"}), 500
+
+@app.route('knowledge/mine', methods=['GET'])
+def get_knowledge_mine(author_id):
+    """
+    ナレッジの自投稿を取得するエンドポイント
+    URL: GET /knowledge/mine?author_id=<author_id>
+    """
+
+    return jsonify({"message": "This is a test message"}), 200
