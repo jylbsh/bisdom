@@ -43,7 +43,7 @@ function Knowledge_Detail() {
                     <tbody>
                         <tr>
                             <td><strong>タイトル</strong></td>
-                            <td>{knowledgeData[0].title}</td>
+                            <td>{knowledgeData.title}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -62,7 +62,7 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>タグ</strong></td>
-                                <td>{knowledgeData[0].tags}</td>
+                                <td>{knowledgeData.tags}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -72,15 +72,15 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>作成者</strong></td>
-                                <td>{knowledgeData[0].create_by}</td>
+                                <td>{knowledgeData.create_by}</td>
                                 <td><strong>作成日</strong></td>
-                                <td>{knowledgeData[0].create_at}</td>
+                                <td>{knowledgeData.create_at}</td>
                             </tr>
                             <tr>
                                 <td><strong>更新者</strong></td>
-                                <td>{knowledgeData[0].update_by}</td>
+                                <td>{knowledgeData.update_by}</td>
                                 <td><strong>更新日</strong></td>
-                                <td>{knowledgeData[0].update_at}</td>
+                                <td>{knowledgeData.update_at}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -92,7 +92,7 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>ナレッジ詳細</strong></td>
-                                <td>{knowledgeData[0].content}</td>
+                                <td>{knowledgeData.content}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -104,7 +104,7 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>補足情報</strong></td>
-                                <td>{knowledgeData[0].image_path}</td>
+                                <td>{knowledgeData.image_path}</td>
                             </tr>
                         </tbody>
                     </table>

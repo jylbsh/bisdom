@@ -242,12 +242,14 @@ def get_knowledge_meisai():
             "id": knowledge.id,
             "title": knowledge.title,
             "content": knowledge.content,
-            "created_at": knowledge.created_at,
-            "updated_at": knowledge.updated_at
+            "create_at": knowledge.create_at,
+            "update_at": knowledge.update_at
         }
 
         return jsonify(knowledge_data), 200
     except Exception as e:
+        # 例外の詳細をログに出力
+        app.logger.error(f"Error fetching knowledge data: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/chat', methods=['POST'])
