@@ -44,9 +44,9 @@ const SearchMixer = ({ visible, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // パラメータとして各種入力情報を URLSearchParams 経由で付加します
+    // URLSearchParams 経由で各種入力情報を付加
     const params = new URLSearchParams();
-    params.append('knowledge_id', keyword);
+    params.append('keyword', keyword);
     params.append('searchType', searchType);
     if (fuzzySearch) params.append('fuzzy', 'true');
     if (selfPost) params.append('selfPost', 'true');
@@ -57,12 +57,20 @@ const SearchMixer = ({ visible, onClose }) => {
     try {
       const response = await fetch(url);
       const data = await response.json();
+
+      // エラーの場合はアラートで表示
+      if (!response.ok) {
+        alert(`エラー: ${data.error}`);
+        return;
+      }
+
       console.log('検索結果:', data);
-      // 取得結果を state に持たせた状態で Knowledge_Detail ルートへ遷移
-      navigate('/knowledge/detail', { state: { knowledgeData: data } });
+      // 検索結果を state に持たせた状態で SearchResult ルートへ遷移
+      navigate('/knowledge/result', { state: { knowledgeData: data } });
       onClose();
     } catch (error) {
       console.error('検索APIエラー:', error);
+      alert('検索APIエラーが発生しました');
     }
   };
 

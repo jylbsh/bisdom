@@ -226,25 +226,58 @@ def get_users():
 
 @app.route('/knowledge/get/meisai', methods=['GET'])
 def get_knowledge_meisai():
-    knowledge_id = request.args.get('knowledge_id')
-    if knowledge_id is None:
+    print(request.args)
+    keyword = request.args.get('keyword')
+    searchType = request.args.get('searchType')
+    if keyword is None:
         raise messages.ApplicationException(messages.ErrorMessages.ERROR_ID_0003E.value, 404)
 
     try:
         # SQLAlchemyを使用してデータを取得
-        knowledge = Knowledge.query.filter_by(id=knowledge_id).first()
+        if searchType == 'id':
+            knowledge = Knowledge.query.filter_by(id=keyword).all()
+        if searchType == 'title':
+            knowledge = Knowledge.query.filter(Knowledge.title.like(f"%{keyword}%")).all()
+            # knowledge = Knowledge.query.filter(Knowledge.title.keyword).all()
+        if searchType == 'tag':
+            knowledge = Knowledge.query.filter(Knowledge.tags.keyword).all()
+        
+        # 検索件数をログ出力
+        app.logger.info(f"検索結果件数: {len(knowledge)}, keyword: {keyword}, searchType: {searchType}")
 
-        if knowledge is None:
+        # if knowledge is None:
+        if not knowledge:
             return jsonify({"error": "No data found"}), 404
 
         # データを辞書形式に変換
-        knowledge_data = {
-            "id": knowledge.id,
-            "title": knowledge.title,
-            "content": knowledge.content,
-            "create_at": knowledge.create_at,
-            "update_at": knowledge.update_at
-        }
+        knowledge_data = []
+        for knowledge in knowledge:
+            knowledge_data.append({
+                "create_at": knowledge.create_at,
+                "create_by": knowledge.create_by,
+                "update_at": knowledge.update_at,
+                "update_by": knowledge.update_by,
+                "version": knowledge.version,
+                "_ts": knowledge._ts,
+                "_etag": knowledge._etag,
+                "is_deleted": knowledge.is_deleted,
+                "deleted_at": knowledge.deleted_at,
+                "deleted_by": knowledge.deleted_by,
+                "id": knowledge.id,
+                "type": knowledge.type,
+                "title": knowledge.title,
+                "content": knowledge.content,
+                "author_id": knowledge.author_id,
+                "visibility": knowledge.visibility,
+                "visible_to_groups": knowledge.visible_to_groups,
+                "tags": knowledge.tags,
+                "image_path": knowledge.image_path,
+                "links": knowledge.links,
+                "editors": knowledge.editors,
+                "viewer_count": knowledge.viewer_count,
+                "bookmark_count": knowledge.bookmark_count,
+                "likes": knowledge.likes,
+            })
 
         return jsonify(knowledge_data), 200
     except Exception as e:

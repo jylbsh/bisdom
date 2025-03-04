@@ -39,8 +39,11 @@ function Knowledge_Detail() {
     }
 
     // fetch("http://127.0.0.1:8080/knowledge/get/meisai?knowledge_id=1");
+    const displayData = Array.isArray(knowledgeData) ? knowledgeData[0] : knowledgeData;
 
-    //バック側の実装の段階で削除して、DBのデータを取ってこれるように書き換えを行う。
+    if (!displayData) {
+    return <div>データが存在しません</div>;
+  }
 
     return(
         <div className="knowledge-detail">
@@ -49,17 +52,17 @@ function Knowledge_Detail() {
                     <tbody>
                         <tr>
                             <td><strong>タイトル</strong></td>
-                            <td>{knowledgeData.title}</td>
+                            <td>{displayData.title}</td>
                         </tr>
                     </tbody>
                 </table>
-                <label class="star-rating">
-                    <input type="checkbox" class="star-checkbox" />
-                    <span class="star"></span>
+                <label className="star-rating">
+                    <input type="checkbox" className="star-checkbox" />
+                    <span className="star"></span>
                 </label>
-                <div class="button-container">
-                    <button id="updateBtn" class="side-button">更新</button>
-                    <button id="downloadBtn" class="side-button">ダウンロード</button>
+                <div className="button-container">
+                    <button id="updateBtn" className="side-button">更新</button>
+                    <button id="downloadBtn" className="side-button">ダウンロード</button>
                 </div>
             </div>
             <div className="info-container">
@@ -68,7 +71,7 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>タグ</strong></td>
-                                <td>{knowledgeData.tags}</td>
+                                <td>{displayData.tags}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -78,15 +81,15 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>作成者</strong></td>
-                                <td>{knowledgeData.create_by}</td>
+                                <td>{displayData.create_by}</td>
                                 <td><strong>作成日</strong></td>
-                                <td>{knowledgeData.create_at}</td>
+                                <td>{displayData.create_at}</td>
                             </tr>
                             <tr>
                                 <td><strong>更新者</strong></td>
-                                <td>{knowledgeData.update_by}</td>
+                                <td>{displayData.update_by}</td>
                                 <td><strong>更新日</strong></td>
-                                <td>{knowledgeData.update_at}</td>
+                                <td>{displayData.update_at}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -98,7 +101,7 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>ナレッジ詳細</strong></td>
-                                <td>{knowledgeData.content}</td>
+                                <td>{displayData.content}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -110,7 +113,7 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>補足情報</strong></td>
-                                <td>{knowledgeData.image_path}</td>
+                                <td>{displayData.image_path}</td>
                             </tr>
                         </tbody>
                     </table>
