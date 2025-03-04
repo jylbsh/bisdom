@@ -12,6 +12,6 @@
 ・push前にpullは忘れずに！！
 
 ## ブランチ命名規則
-画面：feature/develop/front/{機能名}
+画面：feature/front/{機能名}
 
-API：feature/develop/back/{機能名}
+API：feature/back/{機能名}

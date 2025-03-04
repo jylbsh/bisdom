@@ -55,7 +55,8 @@ def auth():
         access_token = create_access_token(identity=user.id)
         refresh_token = create_refresh_token(identity=user.id)
         response = jsonify({
-            "authToken": access_token
+            "authToken": access_token,
+            "refresh_token": refresh_token
         })      
         
         set_refresh_cookies(response, refresh_token)
@@ -76,6 +77,15 @@ def refresh():
     new_access_token = create_access_token(identity=current_user)
 
     return jsonify({"access_token": new_access_token}), 200
+@app.route('/api/auth/check', methods=['GET'])
+@jwt_required()
+def check_auth():
+    try:
+        # トークンが有効であれば、ユーザーIDを取得
+        current_user_id = get_jwt_identity()
+        return jsonify({"msg": "Token is valid", "user_id": current_user_id}), 200
+    except Exception as e:
+        return jsonify({"msg": "Token is invalid", "error": str(e)}), 401
 @app.route('/knowledge/<id>',methods=["GET"])
 @jwt_required()
 def move_to_knowledge_detail(id):
@@ -224,30 +234,80 @@ def get_users():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+from flask_jwt_extended import get_jwt_identity
 @app.route('/knowledge/get/meisai', methods=['GET'])
+@jwt_required()
 def get_knowledge_meisai():
-    knowledge_id = request.args.get('knowledge_id')
-    if knowledge_id is None:
-        raise messages.ApplicationException(messages.ErrorMessages.ERROR_ID_0003E.value, 404)
+    print(request.args)
+    keyword = request.args.get('keyword')
+    searchType = request.args.get('searchType')
+    fuzzy = request.args.get('fuzzy')
+    selfPost = request.args.get('selfPost')
+    favorite = request.args.get('favorite')
+
+    # トークンからユーザ情報を取得
+    current_user_id = get_jwt_identity()
+    print(f"Current user ID: {current_user_id}")
+
+    # if not keyword and (selfPost != 'true' and favorite != 'true'):
+    if not keyword:
+        # raise messages.ApplicationException(messages.ErrorMessages.ERROR_ID_000E.value, 404)
+        return jsonify({"error": messages.ErrorMessages.ERROR_ID_0004E.value}), 404
+    print(f"Keyword: {keyword}, searchType: {searchType}, fuzzy: {fuzzy}, selfPost: {selfPost}, favorite: {favorite}")
 
     try:
         # SQLAlchemyを使用してデータを取得
-        knowledge = Knowledge.query.filter_by(id=knowledge_id).first()
+        if searchType == 'id':
+            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.id.like(f"%{keyword}%")).all()
+            else:knowledge = Knowledge.query.filter_by(id=keyword).all()
+        if searchType == 'title':
+            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.title.like(f"%{keyword}%")).all()
+            else:knowledge = Knowledge.query.filter_by(title=keyword).all()
+        if searchType == 'tag':
+            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.tags.like(f"%{keyword}%")).all()
+            else:knowledge = Knowledge.query.filter_by(tags=keyword).all()
+        
+        # 検索件数をログ出力
+        app.logger.info(f"検索結果件数: {len(knowledge)}, keyword: {keyword}, searchType: {searchType}")
 
-        if knowledge is None:
+        # if knowledge is None:
+        if not knowledge:
             return jsonify({"error": "No data found"}), 404
 
         # データを辞書形式に変換
-        knowledge_data = {
-            "id": knowledge.id,
-            "title": knowledge.title,
-            "content": knowledge.content,
-            "created_at": knowledge.created_at,
-            "updated_at": knowledge.updated_at
-        }
+        knowledge_data = []
+        for knowledge in knowledge:
+            knowledge_data.append({
+                "create_at": knowledge.create_at,
+                "create_by": knowledge.create_by,
+                "update_at": knowledge.update_at,
+                "update_by": knowledge.update_by,
+                "version": knowledge.version,
+                "_ts": knowledge._ts,
+                "_etag": knowledge._etag,
+                "is_deleted": knowledge.is_deleted,
+                "deleted_at": knowledge.deleted_at,
+                "deleted_by": knowledge.deleted_by,
+                "id": knowledge.id,
+                "type": knowledge.type,
+                "title": knowledge.title,
+                "content": knowledge.content,
+                "author_id": knowledge.author_id,
+                "visibility": knowledge.visibility,
+                "visible_to_groups": knowledge.visible_to_groups,
+                "tags": knowledge.tags,
+                "image_path": knowledge.image_path,
+                "links": knowledge.links,
+                "editors": knowledge.editors,
+                "viewer_count": knowledge.viewer_count,
+                "bookmark_count": knowledge.bookmark_count,
+                "likes": knowledge.likes,
+            })
 
         return jsonify(knowledge_data), 200
     except Exception as e:
+        # 例外の詳細をログに出力
+        app.logger.error(f"Error fetching knowledge data: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/chat', methods=['POST'])
@@ -369,3 +429,12 @@ def delete_knowledge(knowledge_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": f"エラーが発生しました: {e}"}), 500
+
+# @app.route('/knowledge/mine', methods=['GET'])
+# def get_knowledge_mine(author_id):
+#     """
+#     ナレッジの自投稿を取得するエンドポイント
+#     URL: GET /knowledge/mine?author_id=<author_id>
+#     """
+
+#     return jsonify({"message": "This is a test message"}), 200

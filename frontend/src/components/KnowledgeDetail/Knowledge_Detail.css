@@ -1,0 +1,201 @@
+/* コンテナ */
+.knowledge-detail-container {
+  background-color: #E5E5E5;
+  color: black;
+  padding: 20px;
+  margin-left: 50px; /* サイドバーの幅に合わせる */
+}
+
+/* タイトル */
+.knowledge-detail-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* コンテンツ */
+.knowledge-detail-content {
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.meta-info {
+  margin-bottom: 20px;
+  background-color: white;
+  /* padding: 10px; */
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+/* タイトルの表のスタイル */
+.title-table {
+  width: 50%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  margin-left: 20px;
+}
+
+.title-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  width:200px;
+}
+
+.title-table td:first-child {
+  font-weight: bold;
+  background-color: #f2f2f2;
+  width: 100px;
+  text-align: center;
+}
+
+/* タグ用のスタイル */
+.tags-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tags-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.tags-table td:first-child {
+  font-weight: bold;
+  background-color: #f2f2f2;
+  width: 150px;
+  text-align: center;
+}
+
+/* 作成者などの表のスタイル */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  width:150px;
+}
+
+.info-table td:first-child,
+.info-table td:nth-child(3) {
+  font-weight: bold;
+  background-color: #f2f2f2;
+  width: 100px;
+  text-align: center;
+}
+
+.info-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tags-table td:first-child {
+    display:flex;
+    text-align: center;
+    flex: 1;
+    margin-left: 20px;
+}
+
+.tags-table td:nth-child(2){
+  display:flex;
+  flex: 1;
+  margin-left: 20px;
+  width:500px;
+}
+
+.info-table {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.knowledgeDetail-table{
+    width:100%;
+    border-collapse: collapse;
+}
+
+.knowledgeDetail-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    width:150px;
+}
+
+.knowledgeDetail-table td:first-child {
+    display:flex;
+    text-align: center;
+    background-color: #f2f2f2;
+    flex: 1;
+    margin-left: 20px;
+}
+
+.knowledgeDetail-table td:nth-child(2){
+  display:flex;
+  flex: 1;
+  margin-left: 20px;
+  width:96%;
+  text-align: left;
+  flex-direction: column;
+}
+
+
+/* ボタンのホバー時 */
+.side-button:hover {
+  background-color: #5281aa;  /* ホバー時の背景色 */
+  cursor: pointer;  /* ホバー時のカーソルをポインターに */
+  transition: background-color 0.3s ease; /* 色変更をスムーズに */
+}
+
+/* ボタンを右揃えにする */
+.button-container {
+  display: flex; /* 子要素を横並びにする */
+  justify-content: flex-end;  /* 子要素を右揃え */
+  gap: 10px; /* ボタンの間隔を追加 */
+  margin-left:auto;
+}
+
+/* ボタンスタイル */
+.side-button {
+  padding: 10px 20px; /* ボタンの内側の余白 */
+  font-size: 16px; /* ボタンの文字サイズ */
+  background-color: #3d4fab; /* ボタンの背景色 */
+  color: white; /* ボタンの文字色 */
+  border: none; /* ボタンの枠線を消す */
+  border-radius: 5px; /* ボタンの角を丸くする */
+  cursor: pointer; /* ポインターカーソル */
+}
+
+/* チェックボックスを隠す */
+.star-checkbox {
+  display: none;
+}
+
+/* 星のデザイン */
+.star-rating {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.star {
+  font-size: 30px;
+  color: #ccc; /* 初期のオフ状態（灰色） */
+  transition: color 0.3s ease;
+}
+
+/* チェックボックスがチェックされた時（オン状態）の星 */
+.star-checkbox:checked + .star {
+  color: gold; /* チェック時に星をゴールドに変える */
+}
+
+/* 星の形（Unicode星を使っている場合） */
+.star::before {
+  content: "★"; /* 星形 */
+}
+

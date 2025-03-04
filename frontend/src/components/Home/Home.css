@@ -3,6 +3,7 @@
   background-color: #E5E5E5;
   color: black;
   padding: 20px;
+  margin-left: 50px; /* サイドバーの幅に合わせる */
 }
 
 /* タブヘッダー */

@@ -85,7 +85,7 @@ class Knowledge(db.Model):
     type = db.Column(db.String, nullable=False, default="knowledge", comment="ドキュメントタイプ (固定値)")
     title = db.Column(db.String, nullable=False, comment="ナレッジのタイトル")
     content = db.Column(db.String, nullable=False, comment="ナレッジの本文")
-    #       ユーザーIDをパーティションキーにする？
+    # ユーザーIDをパーティションキーにする？
     author_id = db.Column(db.String, nullable=False, comment="ナレッジ作成者(パーティションキー)")
     visibility = db.Column(db.String, nullable=False, default="private", comment="公開範囲")
     visible_to_groups = db.Column(db.JSON, nullable=True, default=[], comment="公開先グループ")
