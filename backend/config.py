@@ -4,8 +4,9 @@ import secrets
 from datetime import timedelta
 basedir = os.path.abspath(os.path.dirname(__file__))  # backendフォルダの絶対パス
 database_path = os.path.join(basedir, 'instance', 'database.db')
-# JWT_SECRET_KEY = 'bisdom20242HBXXXWGFIRSTTRIAL'
-JWT_SECRET_KEY = secrets.token_hex(32)
+# JWT_SECRET_KEY を固定値に設定
+JWT_SECRET_KEY = 'bisdom20252HBXXXWGFIRSTTRIAL'
+# JWT_SECRET_KEY = secrets.token_hex(32)
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
 JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
 JWT_COOKIE_HTTPONLY = True

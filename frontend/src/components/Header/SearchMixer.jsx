@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiRequest } from '../Request-manage/request';
 import './SearchMixer.css';
 
 const SearchMixer = ({ visible, onClose }) => {
@@ -44,22 +45,20 @@ const SearchMixer = ({ visible, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // URLSearchParams 経由で各種入力情報を付加
-    const params = new URLSearchParams();
-    params.append('keyword', keyword);
-    params.append('searchType', searchType);
-    if (fuzzySearch) params.append('fuzzy', 'true');
-    if (selfPost) params.append('selfPost', 'true');
-    if (favorite) params.append('favorite', 'true');
-
-    const url = `http://127.0.0.1:8080/knowledge/get/meisai?${params.toString()}`;
+    const params = {
+      keyword,
+      searchType,
+      fuzzy: fuzzySearch ? 'true' : undefined,
+      selfPost: selfPost ? 'true' : undefined,
+      favorite: favorite ? 'true' : undefined,
+    };
 
     try {
-      const response = await fetch(url);
-      const data = await response.json();
+      const response = await apiRequest.get('/knowledge/get/meisai', params);
+      const data = response.data;
 
       // エラーの場合はアラートで表示
-      if (!response.ok) {
+      if (response.status !== 200) {
         alert(`エラー: ${data.error}`);
         return;
       }

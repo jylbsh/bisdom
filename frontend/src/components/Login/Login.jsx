@@ -7,20 +7,17 @@ import { API_URL } from "../../config";
 import x1 from '../../assets/image/logo.png';
 import "./Login.css";
 import axios from "axios";
+
 const buttonColor = '#4A52A7';
 const Header = styled.header`
 display:flex;
 justify-content:left;
 background-color:${buttonColor};
-
 `
 const Logo = styled.img`
 width:20vw;
 height:auto;
 filter: brightness(0) saturate(100%) invert(92%) sepia(93%) saturate(0%) hue-rotate(202deg) brightness(106%) contrast(106%);
-}
-
-
 `
 const StyledLink = styled.a`
 color:blue;
@@ -76,7 +73,6 @@ gap:8px;
 justify-content:center;
 align-items:center;
 text-align:left;
-
 `
 const WrapperInput = styled.div`
 width:10rem;
@@ -85,18 +81,22 @@ height:1.5rem;
 border-radius:0.5rem;}
 `
 
-
 const Login = () => {
-    const {isAuthenticated,login, logout} = useAuth();
+    const {isAuthenticated, login, logout} = useAuth();
     const navigate = useNavigate();
-    useEffect(()=>{
-        if(isAuthenticated){
+    
+    // 認証状態が変わったときにリダイレクトする
+    useEffect(() => {
+        if (isAuthenticated) {
             navigate("/");
         }
-    },[]);
+    }, [isAuthenticated, navigate]);
+
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+
+    // ログイン処理
     const handleLogin = async () => {
         try {
             const response = await axios.post(`${API_URL}/log-in`, {
@@ -105,31 +105,45 @@ const Login = () => {
             });
 
             if (response.data.authToken) {
-                login(); 
-                localStorage.setItem("authToken", response.data.authToken);
-                navigate("/"); 
+                login(response.data.authToken); // 認証状態を更新
+                localStorage.setItem("authToken", response.data.authToken); // トークンをローカルストレージに保存
+                navigate("/"); // ホームページにリダイレクト
             }
         } catch (err) {
-            setError("Invalid username or password."); 
+            setError("Invalid username or password."); // エラーメッセージを設定
             console.error("Login error", err);
         }
     };
+
+    // ログアウト処理
     const handleLogout = () => {
-        logout();
-        navigate("/login");
+        logout(); // 認証状態を更新
+        navigate("/login"); // ログインページにリダイレクト
     };
-    return <><Header><Logo src={x1}></Logo></Header>
-        {!isAuthenticated&&
-        <Wrapper>
-            <WrapperInput>
-            <lable htmlFor="employee_id">ユーザーID
-            </lable>
-            <input type="input" id="employee_id" onChange={(e)=>{setId(e.target.value);console.log(id)}}></input></WrapperInput>
-            <WrapperInput><lable htmlFor="password">パスワード
-            </lable>
-            <input type="input" id="password" onChange={(e)=>{setPassword(e.target.value)}}></input></WrapperInput>
-            <StyledButton onClick={handleLogin}>
-                ログイン    </StyledButton>
-                <StyledLink onClick={()=>{console.log("a")}}>パスワードお忘れですか？</StyledLink></Wrapper>}</>
+
+    return (
+        <>
+            <Header>
+                <Logo src={x1}></Logo>
+            </Header>
+            {!isAuthenticated &&
+                <Wrapper>
+                    <WrapperInput>
+                        <label htmlFor="employee_id">ユーザーID</label>
+                        <input type="input" id="employee_id" onChange={(e) => { setId(e.target.value); console.log(id) }}></input>
+                    </WrapperInput>
+                    <WrapperInput>
+                        <label htmlFor="password">パスワード</label>
+                        <input type="input" id="password" onChange={(e) => { setPassword(e.target.value) }}></input>
+                    </WrapperInput>
+                    <StyledButton onClick={handleLogin}>
+                        ログイン
+                    </StyledButton>
+                    <StyledLink onClick={() => { console.log("a") }}>パスワードお忘れですか？</StyledLink>
+                </Wrapper>
+            }
+        </>
+    );
 }
+
 export default Login;

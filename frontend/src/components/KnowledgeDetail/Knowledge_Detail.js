@@ -15,7 +15,7 @@ function Knowledge_Detail() {
 
     const fetchKnowledgeData = async () => {
         try {
-            const response = await fetch("http://127.0.0.1:8080/knowledge/get/meisai?knowledge_id=1");
+            const response = await fetch("http://127.0.0.1:8080/knowledge/get/meisai?keyword=1&searchType=id");
             const data = await response.json();
             setKnowledgeData(data);
             console.log(data);
@@ -42,10 +42,15 @@ function Knowledge_Detail() {
     const displayData = Array.isArray(knowledgeData) ? knowledgeData[0] : knowledgeData;
 
     if (!displayData) {
-    return <div>データが存在しません</div>;
-  }
+        return <div>データが存在しません</div>;
+    }
 
-    return(
+    // アラート表示関数
+    const showAlert = (message) => {
+        alert(message);
+    };
+
+    return (
         <div className="knowledge-detail">
             <div className="meta-info">
                 <table className="title-table">
@@ -61,8 +66,8 @@ function Knowledge_Detail() {
                     <span className="star"></span>
                 </label>
                 <div className="button-container">
-                    <button id="updateBtn" className="side-button">更新</button>
-                    <button id="downloadBtn" className="side-button">ダウンロード</button>
+                    <button id="updateBtn" className="side-button" onClick={() => showAlert('準備中')}>更新</button>
+                    <button id="downloadBtn" className="side-button" onClick={() => showAlert('準備中')}>ダウンロード</button>
                 </div>
             </div>
             <div className="info-container">

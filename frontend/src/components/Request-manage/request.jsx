@@ -12,13 +12,24 @@ const apiClient = axios.create({
 // リクエストインターセプターで認証トークンを付与
 apiClient.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('access_token');
+        const token = localStorage.getItem('authToken');
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
         return config;
     },
     error => Promise.reject(error)
+);
+
+// レスポンスインターセプターでエラー内容をalertで表示
+apiClient.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response && error.response.data && error.response.data.error) {
+            alert(error.response.data.error);
+        }
+        return Promise.reject(error);
+    }
 );
 
 // 共通APIリクエスト関数

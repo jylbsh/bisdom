@@ -55,7 +55,8 @@ def auth():
         access_token = create_access_token(identity=user.id)
         refresh_token = create_refresh_token(identity=user.id)
         response = jsonify({
-            "authToken": access_token
+            "authToken": access_token,
+            "refresh_token": refresh_token
         })      
         
         set_refresh_cookies(response, refresh_token)
@@ -76,6 +77,15 @@ def refresh():
     new_access_token = create_access_token(identity=current_user)
 
     return jsonify({"access_token": new_access_token}), 200
+@app.route('/api/auth/check', methods=['GET'])
+@jwt_required()
+def check_auth():
+    try:
+        # トークンが有効であれば、ユーザーIDを取得
+        current_user_id = get_jwt_identity()
+        return jsonify({"msg": "Token is valid", "user_id": current_user_id}), 200
+    except Exception as e:
+        return jsonify({"msg": "Token is invalid", "error": str(e)}), 401
 @app.route('/knowledge/<id>',methods=["GET"])
 @jwt_required()
 def move_to_knowledge_detail(id):
@@ -224,23 +234,38 @@ def get_users():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+from flask_jwt_extended import get_jwt_identity
 @app.route('/knowledge/get/meisai', methods=['GET'])
+@jwt_required()
 def get_knowledge_meisai():
     print(request.args)
     keyword = request.args.get('keyword')
     searchType = request.args.get('searchType')
-    if keyword is None:
-        raise messages.ApplicationException(messages.ErrorMessages.ERROR_ID_0003E.value, 404)
+    fuzzy = request.args.get('fuzzy')
+    selfPost = request.args.get('selfPost')
+    favorite = request.args.get('favorite')
+
+    # トークンからユーザ情報を取得
+    current_user_id = get_jwt_identity()
+    print(f"Current user ID: {current_user_id}")
+
+    # if not keyword and (selfPost != 'true' and favorite != 'true'):
+    if not keyword:
+        # raise messages.ApplicationException(messages.ErrorMessages.ERROR_ID_000E.value, 404)
+        return jsonify({"error": messages.ErrorMessages.ERROR_ID_0004E.value}), 404
+    print(f"Keyword: {keyword}, searchType: {searchType}, fuzzy: {fuzzy}, selfPost: {selfPost}, favorite: {favorite}")
 
     try:
         # SQLAlchemyを使用してデータを取得
         if searchType == 'id':
-            knowledge = Knowledge.query.filter_by(id=keyword).all()
+            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.id.like(f"%{keyword}%")).all()
+            else:knowledge = Knowledge.query.filter_by(id=keyword).all()
         if searchType == 'title':
-            knowledge = Knowledge.query.filter(Knowledge.title.like(f"%{keyword}%")).all()
-            # knowledge = Knowledge.query.filter(Knowledge.title.keyword).all()
+            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.title.like(f"%{keyword}%")).all()
+            else:knowledge = Knowledge.query.filter_by(title=keyword).all()
         if searchType == 'tag':
-            knowledge = Knowledge.query.filter(Knowledge.tags.keyword).all()
+            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.tags.like(f"%{keyword}%")).all()
+            else:knowledge = Knowledge.query.filter_by(tags=keyword).all()
         
         # 検索件数をログ出力
         app.logger.info(f"検索結果件数: {len(knowledge)}, keyword: {keyword}, searchType: {searchType}")

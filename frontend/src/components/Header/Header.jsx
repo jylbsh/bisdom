@@ -7,7 +7,7 @@ import x2 from '../../assets/image/search-lens.png';
 import x3 from '../../assets/image/mixer.png';
 import x4 from '../../assets/image/user.png';
 import UserAvatar from '../Avatar/Avatar';
-import request from '../Request-manage/request';
+import { apiRequest } from '../Request-manage/request';
 import SearchMixer from './SearchMixer';
 
 const Header = () => {
@@ -22,22 +22,17 @@ const Header = () => {
 
   // 検索アイコンをクリックしたときにAPIをリクエスト
   const handleSearch = async () => {
-    // URLSearchParams 経由で各種入力情報を付加
-    const params = new URLSearchParams();
-    params.append('keyword', searchText);
-    params.append('searchType', 'title');
-
-    const url = `http://127.0.0.1:8080/knowledge/get/meisai?${params.toString()}`;
-    // const url = `http://127.0.0.1:8080/knowledge/get/meisai?knowledge_id=${encodeURIComponent(searchText)}`;
     try {
-      const response = await fetch(url);
-      const data = await response.json();
+      const params = { keyword: searchText, searchType: 'title' };
+      const response = await apiRequest.get('/knowledge/get/meisai', params);
+      const data = response.data;
+      console.log('検索結果:', data);
+
       // エラーの場合はアラートで表示
-      if (!response.ok) {
+      if (response.status !== 200) {
         alert(`エラー: ${data.error}`);
         return;
       }
-      console.log('検索結果:', data);
       // 取得結果を state に持たせた状態で KnowledgeResult ルートへ遷移
       navigate('/knowledge/result', { state: { knowledgeData: data } });
     } catch (error) {
