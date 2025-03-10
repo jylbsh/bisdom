@@ -10,6 +10,7 @@ import { AuthProvider } from './components/Auth/AuthContext';
 import PrivateRoute from './components/Auth/PrivateRoute';
 import WriteKnowledge from './components/WriteKnowledge/WriteKnowledge';
 import SearchResult from './components/SearchResult/SearchResult';
+import AdminPage from './components/Admin/admin';
 function App() {
   return (
     <AuthProvider>
@@ -22,10 +23,9 @@ function App() {
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
             <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
             <Route path="/delete" element={<PrivateRoute><Delete /></PrivateRoute>} />
-            <Route path="/knowledge/write" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
-            <Route path="/knowledge/update" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
-            <Route path="/knowledge/detail" element={<PrivateRoute><KnowledgeDetail /></PrivateRoute>} />
-            <Route path="/knowledge/result" element={<PrivateRoute><SearchResult /></PrivateRoute>} />
+            <Route path="/writeknowledge" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
+            {/* Update */}
+            <Route path="/writeknowledge/update" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
             <Route path="/login" element={<Login/>}/>
           </Routes>
         </div>
