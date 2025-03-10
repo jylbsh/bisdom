@@ -1,3 +1,13 @@
+/* 大きな枠で囲むコンテナ */
+.chat-container {
+    /* border: 2px solid #a3abff; */
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem;
+    height: calc(100vh - 2rem);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
 /* 全体レイアウト */
 .chat-interface {
     display: flex;
@@ -13,7 +23,6 @@
     flex-grow: 1;
     padding: 1rem;
     background-color: #f9f9f9;
-    /* background-color: #000000; */
     overflow-y: auto;
 }
 
@@ -29,26 +38,28 @@
 
 .chat-message.user {
     display: flex;
-    /* justify-content: flex-end; */
+    justify-content: flex-end;
 }
 
-.chat-message.user .message-text {
-    margin-left: auto;
-}
-
-.message-text {
-    max-width: 60%;
+.chat-message .message-text {
+    max-width: 80%; /* 吹き出しの最大幅を80%に設定 */
     padding: 0.5rem 1rem;
     border-radius: 15px;
     background-color: #e0e0e0;
+    word-wrap: break-word;
     text-align: left; /* デフォルトの左揃え */
 }
 
-/* ユーザーのメッセージは背景色を変更 */
+/* ユーザー側の吹き出し */
 .chat-message.user .message-text {
+    display: inline-block;
     background-color: #a3abff;
     color: white;
-    /* text-align: right; 右揃えに変更 */
+    text-align: right;
+    max-width: 80%; /* 必要に応じて調整 */
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    word-wrap: break-word;
 }
 
 /* 入力エリア */

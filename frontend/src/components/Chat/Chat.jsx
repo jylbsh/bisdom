@@ -11,12 +11,10 @@ const Chat = () => {
     e.preventDefault();
     if (input.trim() === "") return;
     
-    // ユーザーメッセージを追加
     const userMessage = { sender: "user", text: input };
     setMessages([...messages, userMessage]);
     setInput("");
     
-    // デモ用にAIの応答をシミュレーション
     setTimeout(() => {
       const aiResponse = { sender: "ai", text: "あなたのメッセージを受け取りました。" };
       setMessages(prevMessages => [...prevMessages, aiResponse]);
@@ -24,23 +22,25 @@ const Chat = () => {
   };
 
   return (
-    <div className="chat-interface">
-      <div className="chat-window">
-        {messages.map((message, index) => (
-          <div key={index} className={`chat-message ${message.sender}`}>
-            <div className="message-text">{message.text}</div>
-          </div>
-        ))}
+    <div className="chat-container">
+      <div className="chat-interface">
+        <div className="chat-window">
+          {messages.map((message, index) => (
+            <div key={index} className={`chat-message ${message.sender}`}>
+              <div className="message-text">{message.text}</div>
+            </div>
+          ))}
+        </div>
+        <form className="chat-input-area" onSubmit={handleSend}>
+          <input
+            type="text"
+            placeholder="メッセージを入力してください..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <button type="submit">送信</button>
+        </form>
       </div>
-      <form className="chat-input-area" onSubmit={handleSend}>
-        <input
-          type="text"
-          placeholder="メッセージを入力してください..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <button type="submit">送信</button>
-      </form>
     </div>
   );
 };

@@ -23,9 +23,11 @@ function App() {
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
             <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
             <Route path="/delete" element={<PrivateRoute><Delete /></PrivateRoute>} />
-            <Route path="/writeknowledge" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
-            {/* Update */}
-            <Route path="/writeknowledge/update" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
+            <Route path="/knowledge/write" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
+            <Route path="/knowledge/update" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
+            <Route path="/knowledge/detail" element={<PrivateRoute><KnowledgeDetail /></PrivateRoute>} />
+            <Route path="/knowledge/result" element={<PrivateRoute><SearchResult /></PrivateRoute>} />
+            <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
             <Route path="/login" element={<Login/>}/>
           </Routes>
         </div>
