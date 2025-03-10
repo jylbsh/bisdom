@@ -12,7 +12,7 @@ from flask_jwt_extended import JWTManager, create_access_token, create_refresh_t
 
 from utils import add_new_knowledge,get_knowledge_by_id,update_knowledge,get_user_by_id
 import messages
-import chatbotBaseAI
+from chatbotBaseAI import chat_with_openai, conversation
 from model.models import db, Users, Group, Knowledge, Like
 
 with app.app_context():
@@ -244,28 +244,37 @@ def get_knowledge_meisai():
     fuzzy = request.args.get('fuzzy')
     selfPost = request.args.get('selfPost')
     favorite = request.args.get('favorite')
+    allGet = request.args.get('all')
 
     # トークンからユーザ情報を取得
     current_user_id = get_jwt_identity()
     print(f"Current user ID: {current_user_id}")
 
     # if not keyword and (selfPost != 'true' and favorite != 'true'):
-    if not keyword:
+    if (not keyword) & (allGet != 'true') & (selfPost != 'true') & (favorite != 'true'):
         # raise messages.ApplicationException(messages.ErrorMessages.ERROR_ID_000E.value, 404)
         return jsonify({"error": messages.ErrorMessages.ERROR_ID_0004E.value}), 404
-    print(f"Keyword: {keyword}, searchType: {searchType}, fuzzy: {fuzzy}, selfPost: {selfPost}, favorite: {favorite}")
+    print(f"Keyword: {keyword}, searchType: {searchType}, fuzzy: {fuzzy}, selfPost: {selfPost}, favorite: {favorite}, all:{allGet}")
 
     try:
-        # SQLAlchemyを使用してデータを取得
-        if searchType == 'id':
-            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.id.like(f"%{keyword}%")).all()
-            else:knowledge = Knowledge.query.filter_by(id=keyword).all()
-        if searchType == 'title':
-            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.title.like(f"%{keyword}%")).all()
-            else:knowledge = Knowledge.query.filter_by(title=keyword).all()
-        if searchType == 'tag':
-            if fuzzy:knowledge = Knowledge.query.filter(Knowledge.tags.like(f"%{keyword}%")).all()
-            else:knowledge = Knowledge.query.filter_by(tags=keyword).all()
+        # 条件に応じてクエリを生成
+        if allGet == 'true':
+            knowledge = Knowledge.query.all()
+        elif selfPost == 'true':
+            knowledge = Knowledge.query.filter_by(author_id=current_user_id).all()
+        elif searchType in ['id', 'title', 'tag']:
+            # searchType 'tag' はデータベースカラム 'tags' と対応
+            column_map = {'id': 'id', 'title': 'title', 'tag': 'tags'}
+            col_name = column_map[searchType]
+            col = getattr(Knowledge, col_name)
+            
+            if fuzzy:
+                knowledge = Knowledge.query.filter(col.like(f"%{keyword}%")).all()
+            else:
+                knowledge = Knowledge.query.filter_by(**{col_name: keyword}).all()
+        else:
+            # 該当条件がなければ空リストを返すかエラーハンドリング
+            knowledge = []
         
         # 検索件数をログ出力
         app.logger.info(f"検索結果件数: {len(knowledge)}, keyword: {keyword}, searchType: {searchType}")
@@ -309,10 +318,6 @@ def get_knowledge_meisai():
         # 例外の詳細をログに出力
         app.logger.error(f"Error fetching knowledge data: {e}")
         return jsonify({"error": str(e)}), 500
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    user_input = request.json['message']
 
 #Knowledge Download API using knowledge_id
 @app.route('/downloadKnowledge/<knowledge_id>', methods=['GET'])
@@ -430,11 +435,18 @@ def delete_knowledge(knowledge_id):
         db.session.rollback()
         return jsonify({"message": f"エラーが発生しました: {e}"}), 500
 
-# @app.route('/knowledge/mine', methods=['GET'])
-# def get_knowledge_mine(author_id):
-#     """
-#     ナレッジの自投稿を取得するエンドポイント
-#     URL: GET /knowledge/mine?author_id=<author_id>
-#     """
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    if not data or 'message' not in data:
+        return jsonify({"error": "メッセージが送信されていません"}), 400
 
-#     return jsonify({"message": "This is a test message"}), 200
+    user_message = data['message']
+    print(f"User message: {user_message}")
+    conversation.append({"role": "user", "content": user_message})
+
+    response_text = chat_with_openai(conversation)
+    conversation.append({"role": "assistant", "content": response_text})
+    print(f"Assistant response: {response_text}")
+
+    return jsonify({"content": response_text}), 200

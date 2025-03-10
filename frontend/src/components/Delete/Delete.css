@@ -21,13 +21,12 @@ body {
     background-color: #e5e5e5;
     color: black;
     padding: 10px;
-    width: 850px;
-    height: 450px;
+    width: 80%;
+    height: 500px;
     overflow: auto;
     margin-top: 0px;
     margin-left: 10%;
     margin-bottom: 30px;
-    overflow: auto;
   }
   
   /* ?^?u?w?b?_?[ */

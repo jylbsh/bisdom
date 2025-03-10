@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import "./Delete.css"; // 外部CSSファイルをインポート
+import React, { useState, useEffect } from "react"; // useEffect を追加
+import "./Delete.css";
 import { apiRequest } from "../Request-manage/request";
 
 function Delete() {
   const [message, setMessage] = useState("");
-  const [meisaiData, setMeisaiData] = useState(null);
+  const [items, setItems] = useState([]); // 初期値を空の配列に変更
 
   const fetchData_delete = async () => {
     try {
@@ -16,10 +16,10 @@ function Delete() {
       }
       const data = await response.text();
       console.log("Deleted data:", data);
-      setMessage(data ? JSON.stringify(data) : "No data available");
+      alert(data ? JSON.stringify(data) : "No data available");
     } catch (error) {
       console.error("Delete error: ", error);
-      setMessage("Error occurred while deleting");
+      alert("Error occurred while deleting");
     }
   };
 
@@ -28,26 +28,17 @@ function Delete() {
     try {
       const response = await apiRequest.get("/knowledge/get/meisai", { all: true });
       console.log("全件取得結果:", response.data);
-      setMeisaiData(response.data);
-      setMessage("全件取得に成功しました");
+      setItems(response.data); // 取得したデータをitemsに格納
     } catch (error) {
       console.error("全件取得エラー:", error);
-      setMessage("全件取得エラーが発生しました");
+      alert("全件取得エラーが発生しました");
     }
   };
 
-  const [items] = useState([
-    "test1",
-    "test2",
-    "test3",
-    "test4",
-    "test5",
-    "test6",
-    "test7",
-    "test8",
-    "test9",
-    "test10",
-  ]);
+  // ページ読み込み時に全件取得を実施
+  useEffect(() => {
+    fetchMeisaiAll();
+  }, []);
 
   return (
     <>
@@ -56,34 +47,19 @@ function Delete() {
         {items.map((item, index) => (
           <div key={index} className="item-row">
             <div className="narrage-title">
-              <div>{item}</div>
+              {/* オブジェクトそのままレンダリングするのではなく、必要なプロパティを表示 */}
+              <div>{item.title}</div>
             </div>
             <div>
-              <button
-                className="detail-button"
-                /* onClick={fetchData_detail} */
-              >
-                詳細
-              </button>
-              <button
-                className="delete-button"
-                onClick={fetchData_delete}
-              >
+              <button className="detail-button">詳細</button>
+              <button className="delete-button" onClick={fetchData_delete}>
                 削除
               </button>
             </div>
           </div>
         ))}
       </div>
-      <div style={{ marginTop: "20px" }}>
-        <button onClick={fetchMeisaiAll}>全件取得 (get-meisai)</button>
-      </div>
       {message && <p>{message}</p>}
-      {meisaiData && (
-        <div className="meisai-data">
-          <pre>{JSON.stringify(meisaiData, null, 2)}</pre>
-        </div>
-      )}
     </>
   );
 }

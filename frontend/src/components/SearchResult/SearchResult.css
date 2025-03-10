@@ -4,7 +4,7 @@
   color: #282E75; /* 文字色 */
   margin-left: 50px; /* サイドバーの幅に合わせる */
   padding-bottom: 100px; /* 下部に余分なスペースを追加 */
-  max-height: 80vh; /* 最低でも画面いっぱいの高さを確保 */
+  max-height: 50vh; /* 最低でも画面いっぱいの高さを確保 */
   overflow-y: auto;  /* 垂直スクロールを有効にする */
 }
 
