@@ -1,32 +1,17 @@
-import sqlite3
-import os
+import requests
 
-def insert_test_data():
-    # データベースファイルへの相対パスを取得
-    db_path = os.path.join(os.path.dirname(__file__), '..', 'instance', 'database.db')
-    
-    # データベースに接続
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+def test_add_new_knowledge_success():
+    url = "http://127.0.0.1:8080/add-knowledge"
+    payload = {
+        "title": "テスト題目",
+        "contents": "<p>これはテストです。</p>",
+        "author_id": "test_author"
+    }
 
-    # テストデータの定義
-    test_data = (
-        '1', 'knowledge', 'Test Title', 'Test Content', 'author_1', 'private', 
-        '2023-01-01', 'system', '2023-01-01', 'system', 1, 'etag_1', 0, 0, '', '', 0, 0
-    )
+    response = requests.post(url, json=payload)
 
-    # テストデータの挿入
-    cursor.execute('''
-    INSERT INTO knowledge (
-        id, type, title, content, author_id, visibility, create_at, create_by, 
-        update_at, update_by, _ts, _etag, version, is_deleted, tags, editors, 
-        viewer_count, bookmark_count
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', test_data)
-
-    # コミットして接続を閉じる
-    conn.commit()
-    conn.close()
+    print("Status code:", response.status_code)
+    print("Response:", response.json())
 
 if __name__ == '__main__':
-    insert_test_data()
+    test_add_new_knowledge_success()

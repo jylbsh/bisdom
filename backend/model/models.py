@@ -3,35 +3,35 @@ from init import db
 class Users(db.Model):
     __tablename__ = 'users'
 
-    # Šî–{€–Ú
-    create_at = db.Column(db.String, nullable=False, default="(ƒVƒXƒeƒ€“ú)", comment="ƒŒƒR[ƒhì¬“ú (ISO 8601Œ`®)")
-    create_by = db.Column(db.String, nullable=False, comment="ƒŒƒR[ƒhì¬Ò")
-    update_at = db.Column(db.String, nullable=False, default="(ƒVƒXƒeƒ€“ú)", comment="ƒŒƒR[ƒhXV“ú (ISO 8601Œ`®)")
-    update_by = db.Column(db.String, nullable=False, comment="ƒŒƒR[ƒhXVÒ")
-    version = db.Column(db.Integer, nullable=False, default=0, comment="XV‰ñ” (‰Šú’l: 0)")
-    _ts = db.Column(db.Integer, nullable=False, comment="CosmosDB‚Ì“à•”ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv")
-    _etag = db.Column(db.String, nullable=False, comment="CosmosDB‚Ì”r‘¼§Œäƒg[ƒNƒ“")
+    # åŸºæœ¬é …ç›®
+    create_at = db.Column(db.String, nullable=False, default="(ã‚·ã‚¹ãƒ†ãƒ æ—¥æ™‚)", comment="ãƒ¬ã‚³ãƒ¼ãƒ‰ä½œæˆæ—¥æ™‚ (ISO 8601å½¢å¼)")
+    create_by = db.Column(db.String, nullable=False, comment="ãƒ¬ã‚³ãƒ¼ãƒ‰ä½œæˆè€…")
+    update_at = db.Column(db.String, nullable=False, default="(ã‚·ã‚¹ãƒ†ãƒ æ—¥æ™‚)", comment="ãƒ¬ã‚³ãƒ¼ãƒ‰æ›´æ–°æ—¥æ™‚ (ISO 8601å½¢å¼)")
+    update_by = db.Column(db.String, nullable=False, comment="ãƒ¬ã‚³ãƒ¼ãƒ‰æ›´æ–°è€…")
+    version = db.Column(db.Integer, nullable=False, default=0, comment="æ›´æ–°å›æ•° (åˆæœŸå€¤: 0)")
+    _ts = db.Column(db.Integer, nullable=False, comment="CosmosDBã®å†…éƒ¨ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—")
+    _etag = db.Column(db.String, nullable=False, comment="CosmosDBã®æ’ä»–åˆ¶å¾¡ãƒˆãƒ¼ã‚¯ãƒ³")
     
-    # ˜_—íœŠÖ˜A
-    is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="˜_—íœƒtƒ‰ƒO (true/false)")
-    deleted_at = db.Column(db.String, nullable=True, comment="˜_—íœ“ú (ISO 8601Œ`®)")
-    deleted_by = db.Column(db.String, nullable=True, comment="˜_—íœ‚ğÀs‚µ‚½ƒ†[ƒU[‚ÌID")
+    # è«–ç†å‰Šé™¤é–¢é€£
+    is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="è«–ç†å‰Šé™¤ãƒ•ãƒ©ã‚° (true/false)")
+    deleted_at = db.Column(db.String, nullable=True, comment="è«–ç†å‰Šé™¤æ—¥æ™‚ (ISO 8601å½¢å¼)")
+    deleted_by = db.Column(db.String, nullable=True, comment="è«–ç†å‰Šé™¤ã‚’å®Ÿè¡Œã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ID")
 
-    # ƒ†[ƒU[î•ñ
-    id = db.Column(db.String, primary_key=True, nullable=False, comment="Ğˆõ”Ô† (ƒ†[ƒU[ID‚Æ‚µ‚Äg—p)")
-    type = db.Column(db.String, nullable=False, default="users", comment="ƒhƒLƒ…ƒƒ“ƒgƒ^ƒCƒv (ŒÅ’è’l: 'users')")
-    name = db.Column(db.String, nullable=False, comment="ƒ†[ƒU[‚Ì–¼")
-    display_name = db.Column(db.String, nullable=True, comment="ƒVƒXƒeƒ€ã‚Å•\¦‚³‚ê‚é–¼‘O")
-    email = db.Column(db.String, nullable=False, unique=True, comment="Ğ“àƒ[ƒ‹ƒAƒhƒŒƒX")
-    password_hash = db.Column(db.String, nullable=False, comment="ƒnƒbƒVƒ…‰»‚³‚ê‚½ƒpƒXƒ[ƒh")
+    # ãƒ¦ãƒ¼ã‚¶ãƒ¼æƒ…å ±
+    id = db.Column(db.String, primary_key=True, nullable=False, comment="ç¤¾å“¡ç•ªå· (ãƒ¦ãƒ¼ã‚¶ãƒ¼IDã¨ã—ã¦ä½¿ç”¨)")
+    type = db.Column(db.String, nullable=False, default="users", comment="ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚¿ã‚¤ãƒ— (å›ºå®šå€¤: 'users')")
+    name = db.Column(db.String, nullable=False, comment="ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®æ°å")
+    display_name = db.Column(db.String, nullable=True, comment="ã‚·ã‚¹ãƒ†ãƒ ä¸Šã§è¡¨ç¤ºã•ã‚Œã‚‹åå‰")
+    email = db.Column(db.String, nullable=False, unique=True, comment="ç¤¾å†…ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹")
+    password_hash = db.Column(db.String, nullable=False, comment="ãƒãƒƒã‚·ãƒ¥åŒ–ã•ã‚ŒãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰")
     
-    # ƒXƒgƒŒ[ƒWŠÖ˜A
-    storage_quota = db.Column(db.Integer, nullable=False, default=-1, comment="ƒXƒgƒŒ[ƒW§ŒÀ’l (MB) (-1: –³§ŒÀ)")
-    storage_used = db.Column(db.Integer, nullable=False, default=0, comment="Œ»İ‚ÌƒXƒgƒŒ[ƒWg—p—Ê (0ˆÈã)")
+    # ã‚¹ãƒˆãƒ¬ãƒ¼ã‚¸é–¢é€£
+    storage_quota = db.Column(db.Integer, nullable=False, default=-1, comment="ã‚¹ãƒˆãƒ¬ãƒ¼ã‚¸åˆ¶é™å€¤ (MB) (-1: ç„¡åˆ¶é™)")
+    storage_used = db.Column(db.Integer, nullable=False, default=0, comment="ç¾åœ¨ã®ã‚¹ãƒˆãƒ¬ãƒ¼ã‚¸ä½¿ç”¨é‡ (0ä»¥ä¸Š)")
 
-    # ‚»‚Ì‘¼
-    affiliation = db.Column(db.JSON, nullable=True, default=[], comment="Š‘®ƒOƒ‹[ƒv‚Ì”z—ñ (—á: ['‰c‹Æ', 'admin'])")
-    last_login_at = db.Column(db.String, nullable=True, comment="ÅŒã‚ÉƒƒOƒCƒ“‚µ‚½“ú (ISO 8601Œ`®)")
+    # ãã®ä»–
+    affiliation = db.Column(db.JSON, nullable=True, default=[], comment="æ‰€å±ã‚°ãƒ«ãƒ¼ãƒ—ã®é…åˆ— (ä¾‹: ['å–¶æ¥­', 'admin'])")
+    last_login_at = db.Column(db.String, nullable=True, comment="æœ€å¾Œã«ãƒ­ã‚°ã‚¤ãƒ³ã—ãŸæ—¥æ™‚ (ISO 8601å½¢å¼)")
     likes = db.relationship('Like', back_populates='user', lazy=True)
 
     def __repr__(self):
@@ -40,25 +40,25 @@ class Users(db.Model):
 class Group(db.Model):
     __tablename__ = 'groups'
 
-    # Šî–{€–Ú
-    create_at = db.Column(db.String, nullable=False, default="(ƒVƒXƒeƒ€“ú)", comment="ƒŒƒR[ƒhì¬“ú")
-    create_by = db.Column(db.String, nullable=False, comment="ƒŒƒR[ƒhì¬Ò")
-    update_at = db.Column(db.String, nullable=False, default="(ƒVƒXƒeƒ€“ú)", comment="ƒŒƒR[ƒhXV“ú")
-    update_by = db.Column(db.String, nullable=False, comment="ƒŒƒR[ƒhXVÒ")
-    version = db.Column(db.Integer, nullable=False, default=0, comment="XV‰ñ” (‰Šú’l: 0)")
-    _ts = db.Column(db.Integer, nullable=False, comment="CosmosDB‚Ì“à•”ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv")
-    _etag = db.Column(db.String, nullable=False, comment="CosmosDB‚Ì”r‘¼§Œäƒg[ƒNƒ“")
+    # åŸºæœ¬é …ç›®
+    create_at = db.Column(db.String, nullable=False, default="(ã‚·ã‚¹ãƒ†ãƒ æ—¥æ™‚)", comment="ãƒ¬ã‚³ãƒ¼ãƒ‰ä½œæˆæ—¥æ™‚")
+    create_by = db.Column(db.String, nullable=False, comment="ãƒ¬ã‚³ãƒ¼ãƒ‰ä½œæˆè€…")
+    update_at = db.Column(db.String, nullable=False, default="(ã‚·ã‚¹ãƒ†ãƒ æ—¥æ™‚)", comment="ãƒ¬ã‚³ãƒ¼ãƒ‰æ›´æ–°æ—¥æ™‚")
+    update_by = db.Column(db.String, nullable=False, comment="ãƒ¬ã‚³ãƒ¼ãƒ‰æ›´æ–°è€…")
+    version = db.Column(db.Integer, nullable=False, default=0, comment="æ›´æ–°å›æ•° (åˆæœŸå€¤: 0)")
+    _ts = db.Column(db.Integer, nullable=False, comment="CosmosDBã®å†…éƒ¨ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—")
+    _etag = db.Column(db.String, nullable=False, comment="CosmosDBã®æ’ä»–åˆ¶å¾¡ãƒˆãƒ¼ã‚¯ãƒ³")
 
-    # ˜_—íœŠÖ˜A
-    is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="˜_—íœƒtƒ‰ƒO (true/false)")
-    deleted_at = db.Column(db.String, nullable=True, comment="˜_—íœ“ú")
-    deleted_by = db.Column(db.String, nullable=True, comment="˜_—íœ‚ğÀs‚µ‚½ƒ†[ƒU[‚ÌID")
+    # è«–ç†å‰Šé™¤é–¢é€£
+    is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="è«–ç†å‰Šé™¤ãƒ•ãƒ©ã‚° (true/false)")
+    deleted_at = db.Column(db.String, nullable=True, comment="è«–ç†å‰Šé™¤æ—¥æ™‚")
+    deleted_by = db.Column(db.String, nullable=True, comment="è«–ç†å‰Šé™¤ã‚’å®Ÿè¡Œã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ID")
 
-    # ƒOƒ‹[ƒvî•ñ
-    id = db.Column(db.String, primary_key=True, nullable=False, comment="ƒOƒ‹[ƒvID (ƒp[ƒeƒBƒVƒ‡ƒ“ƒL[)")
-    type = db.Column(db.String, nullable=False, default="groups", comment="ƒhƒLƒ…ƒƒ“ƒgƒ^ƒCƒv (ŒÅ’è’l: 'groups')")
-    name = db.Column(db.String, nullable=False, unique=True, comment="ƒOƒ‹[ƒv‚Ì–¼Ì")
-    administrators = db.Column(db.JSON, nullable=False, default=[], comment="ƒOƒ‹[ƒvŠÇ—Ò‚Ì”z—ñ")
+    # ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±
+    id = db.Column(db.String, primary_key=True, nullable=False, comment="ã‚°ãƒ«ãƒ¼ãƒ—ID (ãƒ‘ãƒ¼ãƒ†ã‚£ã‚·ãƒ§ãƒ³ã‚­ãƒ¼)")
+    type = db.Column(db.String, nullable=False, default="groups", comment="ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚¿ã‚¤ãƒ— (å›ºå®šå€¤: 'groups')")
+    name = db.Column(db.String, nullable=False, unique=True, comment="ã‚°ãƒ«ãƒ¼ãƒ—ã®åç§°")
+    administrators = db.Column(db.JSON, nullable=False, default=[], comment="ã‚°ãƒ«ãƒ¼ãƒ—ç®¡ç†è€…ã®é…åˆ—")
 
     def __repr__(self):
         return f"<Group {self.id} - {self.name}>"
@@ -66,35 +66,34 @@ class Group(db.Model):
 class Knowledge(db.Model):
     __tablename__ = 'knowledge'
 
-    # Šî–{€–Ú
-    create_at = db.Column(db.String, nullable=False, default="(ƒVƒXƒeƒ€“ú)", comment="ƒŒƒR[ƒhì¬“ú")
-    create_by = db.Column(db.String, nullable=False, comment="ƒŒƒR[ƒhì¬Ò")
-    update_at = db.Column(db.String, nullable=False, default="(ƒVƒXƒeƒ€“ú)", comment="ƒŒƒR[ƒhXV“ú")
-    update_by = db.Column(db.String, nullable=False, comment="ƒŒƒR[ƒhXVÒ")
-    version = db.Column(db.Integer, nullable=False, default=0, comment="XV‰ñ”")
-    _ts = db.Column(db.Integer, nullable=False,default=0, comment="CosmosDB‚Ì“à•”ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv")
-    _etag = db.Column(db.String, nullable=False,default="", comment="CosmosDB‚Ì”r‘¼§Œäƒg[ƒNƒ“")
+    # åŸºæœ¬é …ç›®
+    create_at = db.Column(db.String, nullable=False, default="(ã‚·ã‚¹ãƒ†ãƒ æ—¥æ™‚)", comment="ãƒ¬ã‚³ãƒ¼ãƒ‰ä½œæˆæ—¥æ™‚")
+    create_by = db.Column(db.String, nullable=False, comment="ãƒ¬ã‚³ãƒ¼ãƒ‰ä½œæˆè€…")
+    update_at = db.Column(db.String, nullable=False, default="(ã‚·ã‚¹ãƒ†ãƒ æ—¥æ™‚)", comment="ãƒ¬ã‚³ãƒ¼ãƒ‰æ›´æ–°æ—¥æ™‚")
+    update_by = db.Column(db.String, nullable=False, comment="ãƒ¬ã‚³ãƒ¼ãƒ‰æ›´æ–°è€…")
+    version = db.Column(db.Integer, nullable=False, default=0, comment="æ›´æ–°å›æ•°")
+    _ts = db.Column(db.Integer, nullable=False, default=0, comment="CosmosDBã®å†…éƒ¨ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—")
+    _etag = db.Column(db.String, nullable=False, default="", comment="CosmosDBã®æ’ä»–åˆ¶å¾¡ãƒˆãƒ¼ã‚¯ãƒ³")
 
-    # ˜_—íœŠÖ˜A
-    is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="˜_—íœƒtƒ‰ƒO")
-    deleted_at = db.Column(db.String, nullable=True, comment="˜_—íœ“ú")
-    deleted_by = db.Column(db.String, nullable=True, comment="˜_—íœ‚ğÀs‚µ‚½ƒ†[ƒU[‚ÌID")
+    # è«–ç†å‰Šé™¤é–¢é€£
+    is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="è«–ç†å‰Šé™¤ãƒ•ãƒ©ã‚°")
+    deleted_at = db.Column(db.String, nullable=True, comment="è«–ç†å‰Šé™¤æ—¥æ™‚")
+    deleted_by = db.Column(db.String, nullable=True, comment="è«–ç†å‰Šé™¤ã‚’å®Ÿè¡Œã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ID")
 
-    # ƒiƒŒƒbƒWî•ñ
-    id = db.Column(db.String, primary_key=True, nullable=False, comment="ƒiƒŒƒbƒWID (ƒp[ƒeƒBƒVƒ‡ƒ“ƒL[)")
-    type = db.Column(db.String, nullable=False, default="knowledge", comment="ƒhƒLƒ…ƒƒ“ƒgƒ^ƒCƒv (ŒÅ’è’l)")
-    title = db.Column(db.String, nullable=False, comment="ƒiƒŒƒbƒW‚Ìƒ^ƒCƒgƒ‹")
-    content = db.Column(db.String, nullable=False, comment="ƒiƒŒƒbƒW‚Ì–{•¶")
-    author_id = db.Column(db.String, nullable=False, comment="ƒiƒŒƒbƒWì¬Ò(ƒp[ƒeƒBƒVƒ‡ƒ“ƒL[)")
-    visibility = db.Column(db.String, nullable=False, default="private", comment="ŒöŠJ”ÍˆÍ")
-    visible_to_groups = db.Column(db.JSON, nullable=True, default=[], comment="ŒöŠJæƒOƒ‹[ƒv")
-    tags = db.Column(db.JSON, nullable=False, default=[], comment="ƒiƒŒƒbƒW‚Ìƒ^ƒO")
-    image_path = db.Column(db.JSON, nullable=True, default=[], comment="‰æ‘œƒpƒX")
-    links = db.Column(db.JSON, nullable=True, default=[], comment="ƒiƒŒƒbƒW‚É–„‚ß‚Ü‚ê‚Ä‚¢‚éƒŠƒ“ƒN")
-    editors = db.Column(db.JSON, nullable=False, default=[], comment="‹¤“¯•ÒWÒ")
-    viewer_count = db.Column(db.Integer, nullable=False, default=0, comment="‰{——”")
-    bookmark_count = db.Column(db.Integer, nullable=False, default=0, comment="ƒuƒbƒNƒ}[ƒN”")
-    likes = db.relationship('Like', back_populates='knowledge', lazy=True)
+    # ãƒŠãƒ¬ãƒƒã‚¸æƒ…å ±
+    id = db.Column(db.String, primary_key=True, nullable=False, comment="ãƒŠãƒ¬ãƒƒã‚¸ID (ãƒ‘ãƒ¼ãƒ†ã‚£ã‚·ãƒ§ãƒ³ã‚­ãƒ¼)")
+    type = db.Column(db.String, nullable=False, default="knowledge", comment="ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚¿ã‚¤ãƒ— (å›ºå®šå€¤)")
+    title = db.Column(db.String, nullable=False, comment="ãƒŠãƒ¬ãƒƒã‚¸ã®ã‚¿ã‚¤ãƒˆãƒ«")
+    content = db.Column(db.String, nullable=False, comment="ãƒŠãƒ¬ãƒƒã‚¸ã®æœ¬æ–‡")
+    author_id = db.Column(db.String, nullable=False, comment="ãƒŠãƒ¬ãƒƒã‚¸ä½œæˆè€…(ãƒ‘ãƒ¼ãƒ†ã‚£ã‚·ãƒ§ãƒ³ã‚­ãƒ¼)")
+    visibility = db.Column(db.String, nullable=False, default="private", comment="å…¬é–‹ç¯„å›²")
+    visible_to_groups = db.Column(db.JSON, nullable=True, default=[], comment="å…¬é–‹å…ˆã‚°ãƒ«ãƒ¼ãƒ—")
+    tags = db.Column(db.JSON, nullable=False, default=[], comment="ãƒŠãƒ¬ãƒƒã‚¸ã®ã‚¿ã‚°")
+    image_path = db.Column(db.JSON, nullable=True, default=[], comment="ç”»åƒãƒ‘ã‚¹")
+    links = db.Column(db.JSON, nullable=True, default=[], comment="ãƒŠãƒ¬ãƒƒã‚¸ã«åŸ‹ã‚è¾¼ã¾ã‚Œã¦ã„ã‚‹ãƒªãƒ³ã‚¯")
+    editors = db.Column(db.JSON, nullable=False, default=[], comment="å…±åŒç·¨é›†è€…")
+    viewer_count = db.Column(db.Integer, nullable=False, default=0, comment="é–²è¦§æ•°")
+    bookmark_count = db.Column(db.Integer, nullable=False, default=0, comment="ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯æ•°")
 
     def __repr__(self):
         return f"<Knowledge {self.id} - {self.title}>"
@@ -106,7 +105,7 @@ class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     knowledge_id = db.Column(db.Integer, db.ForeignKey('knowledge.id'), primary_key=True)
     user = db.relationship('Users', back_populates='likes')
-    knowledge = db.relationship('Knowledge', back_populates='likes')
+    # knowledge = db.relationship('Knowledge', back_populates='likes')
 
     def __repr__(self):
         return f"<Likes {self.user_id} - {self.knowledge_id}>"

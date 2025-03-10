@@ -77,6 +77,7 @@ function Home() {
             <li><a href="http://localhost:3000/knowledge/write">ナレッジ作成画面</a></li>
             <li><a href="http://localhost:3000/knowledge/update">ナレッジ更新画面</a></li>
             <li><a href="http://localhost:3000/knowledge/detail">ナレッジ詳細画面</a></li>
+            <li><a href="http://localhost:3000/test-page">その他テスト</a></li>
           </div>
         )}
       </div>

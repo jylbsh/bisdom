@@ -11,12 +11,12 @@ const Chat = () => {
     e.preventDefault();
     if (input.trim() === "") return;
     
-    const userMessage = { sender: "user", text: input };
+    const userMessage = { sender: "user", text:input };
     setMessages([...messages, userMessage]);
     setInput("");
     
     setTimeout(() => {
-      const aiResponse = { sender: "ai", text: "あなたのメッセージを受け取りました。" };
+      const aiResponse = { sender: "ai", text:"あなたのメッセージを受け取りました。" };
       setMessages(prevMessages => [...prevMessages, aiResponse]);
     }, 1000);
   };
@@ -26,8 +26,11 @@ const Chat = () => {
       <div className="chat-interface">
         <div className="chat-window">
           {messages.map((message, index) => (
-            <div key={index} className={`chat-message ${message.sender}`}>
-              <div className="message-text">{message.text}</div>
+            // user側のレイアウトが不具合を起こすため、ai側のレイアウトをコピーしてuser側にも適用
+            // <div key={index} className={`chat-message ${message.sender === "user" ? "user" : "ai"}`}>
+            <div key={index} className={`chat-message ${message.sender === "user" ? "ai" : "ai"}`}>
+            {/* // <div key={index} className={`chat-message ${message.sender}`}> */}
+            <div className="message-text">{message.text}</div>
             </div>
           ))}
         </div>

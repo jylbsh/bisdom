@@ -11,6 +11,7 @@ import PrivateRoute from './components/Auth/PrivateRoute';
 import WriteKnowledge from './components/WriteKnowledge/WriteKnowledge';
 import SearchResult from './components/SearchResult/SearchResult';
 import AdminPage from './components/Admin/admin';
+import Test from './components/00_Test/Test';
 function App() {
   return (
     <AuthProvider>
@@ -29,6 +30,8 @@ function App() {
             <Route path="/knowledge/result" element={<PrivateRoute><SearchResult /></PrivateRoute>} />
             <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
             <Route path="/login" element={<Login/>}/>
+            {/* 以下はテスト用 */}
+            <Route path="/test-page" element={<PrivateRoute><Test /></PrivateRoute>} />
           </Routes>
         </div>
       </div>

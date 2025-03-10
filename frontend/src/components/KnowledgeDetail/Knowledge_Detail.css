@@ -3,7 +3,9 @@
   background-color: #E5E5E5;
   color: black;
   padding: 20px;
-  margin-left: 50px; /* サイドバーの幅に合わせる */
+  margin-left: 50px;
+  min-height: 100vh;
+  overflow-y: auto; /* 内容が多い場合のみスクロールバーが表示されます */
 }
 
 /* タイトル */
@@ -199,5 +201,15 @@
 /* 星の形（Unicode星を使っている場合） */
 .star::before {
   content: "★"; /* 星形 */
+}
+
+/* 既存のスタイルは変更せず、ナレッジ詳細部分のみスクロール可能にします */
+
+.knowledgeDetail-content {
+  max-height: 200px;    /* 必要に応じて高さを調整してください */
+  overflow-y: auto;     /* コンテンツが高さを超えた場合にスクロール */
+  padding: 10px;
+  background-color: #fff; /* 必要に応じて背景色を設定 */
+  border-radius: 5px;
 }
 

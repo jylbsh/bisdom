@@ -106,7 +106,7 @@ function Knowledge_Detail() {
                         <tbody>
                             <tr>
                                 <td><strong>ナレッジ詳細</strong></td>
-                                <td>{displayData.content}</td>
+                                <td className="knowledgeDetail-content" dangerouslySetInnerHTML={{ __html: displayData.content }} />
                             </tr>
                         </tbody>
                     </table>
