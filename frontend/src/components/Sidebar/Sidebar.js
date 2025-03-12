@@ -48,7 +48,7 @@ function Sidebar() {
             {isOpen && <Link to="/favorite">ブックマーク</Link>}
           </li>
           <li>
-            <button className="sidebar-button" onClick={() => window.location.href = '/favorite'}>
+            <button className="sidebar-button" onClick={() => window.location.href = '/admin'}>
               <img src={s4} alt="Admin Icon" />
             </button>
             {isOpen && <Link to="/admin">管理者機能</Link>}

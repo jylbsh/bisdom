@@ -110,7 +110,12 @@ def add_knowledge():
     if request.method == 'get':
         return jsonify({"message":"Access Denied"}),400
     try:
+        # トークンからユーザ情報を取得
+        current_user_id = request.args.get('author_id', get_jwt_identity())        
+        print(f"Current user ID: {current_user_id}")
+        
         data:dict|None = request.get_json()
+        data["author_id"] = current_user_id
         result,exit_code = add_new_knowledge(data)
         match exit_code:
             case 0:
@@ -250,28 +255,25 @@ def get_knowledge_meisai():
     current_user_id = get_jwt_identity()
     print(f"Current user ID: {current_user_id}")
 
-    # if not keyword and (selfPost != 'true' and favorite != 'true'):
     if (not keyword) & (allGet != 'true') & (selfPost != 'true') & (favorite != 'true'):
-        # raise messages.ApplicationException(messages.ErrorMessages.ERROR_ID_000E.value, 404)
         return jsonify({"error": messages.ErrorMessages.ERROR_ID_0004E.value}), 404
     print(f"Keyword: {keyword}, searchType: {searchType}, fuzzy: {fuzzy}, selfPost: {selfPost}, favorite: {favorite}, all:{allGet}")
 
     try:
         # 条件に応じてクエリを生成
         if allGet == 'true':
-            knowledge = Knowledge.query.all()
+            knowledge = Knowledge.query.filter_by(is_deleted=False).all()
         elif selfPost == 'true':
-            knowledge = Knowledge.query.filter_by(author_id=current_user_id).all()
+            knowledge = Knowledge.query.filter_by(author_id=current_user_id, is_deleted=False).all()
         elif searchType in ['id', 'title', 'tag']:
-            # searchType 'tag' はデータベースカラム 'tags' と対応
             column_map = {'id': 'id', 'title': 'title', 'tag': 'tags'}
             col_name = column_map[searchType]
             col = getattr(Knowledge, col_name)
             
             if fuzzy:
-                knowledge = Knowledge.query.filter(col.like(f"%{keyword}%")).all()
+                knowledge = Knowledge.query.filter(col.like(f"%{keyword}%"), Knowledge.is_deleted==False).all()
             else:
-                knowledge = Knowledge.query.filter_by(**{col_name: keyword}).all()
+                knowledge = Knowledge.query.filter_by(**{col_name: keyword, "is_deleted": False}).all()
         else:
             # 該当条件がなければ空リストを返すかエラーハンドリング
             knowledge = []
@@ -404,7 +406,8 @@ def send_like_request():
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
-@app.route('/knowledge/<string:knowledge_id>', methods=['DELETE'])
+@app.route('/knowledge/delete/<string:knowledge_id>', methods=['DELETE'])
+@jwt_required()  # JWT認証を追加
 def delete_knowledge(knowledge_id):
     """
     ナレッジの論理削除を行うエンドポイント
@@ -421,11 +424,15 @@ def delete_knowledge(knowledge_id):
         if not knowledge:
             return jsonify({"message": "対象のナレッジが見つかりませんでした"}), 404
 
+        # トークンからユーザ情報を取得
+        current_user_id = get_jwt_identity()
+        print(f"Current user ID: {current_user_id}")
+
         # ナレッジを論理削除するために状態を更新
         knowledge.is_deleted = True
         knowledge.deleted_at = datetime.now().isoformat()
         # リクエストの JSON から削除者の情報を取得、存在しなければ 'anonymous' を設定
-        deleted_by = request.json.get('deleted_by', 'anonymous')
+        deleted_by = current_user_id if current_user_id else 'anonymous'
         knowledge.deleted_by = deleted_by
 
         db.session.commit()

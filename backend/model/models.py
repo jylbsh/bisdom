@@ -3,20 +3,6 @@ from init import db
 class Users(db.Model):
     __tablename__ = 'users'
 
-    # 基本項目
-    create_at = db.Column(db.String, nullable=False, default="(システム日時)", comment="レコード作成日時 (ISO 8601形式)")
-    create_by = db.Column(db.String, nullable=False, comment="レコード作成者")
-    update_at = db.Column(db.String, nullable=False, default="(システム日時)", comment="レコード更新日時 (ISO 8601形式)")
-    update_by = db.Column(db.String, nullable=False, comment="レコード更新者")
-    version = db.Column(db.Integer, nullable=False, default=0, comment="更新回数 (初期値: 0)")
-    _ts = db.Column(db.Integer, nullable=False, comment="CosmosDBの内部タイムスタンプ")
-    _etag = db.Column(db.String, nullable=False, comment="CosmosDBの排他制御トークン")
-    
-    # 論理削除関連
-    is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="論理削除フラグ (true/false)")
-    deleted_at = db.Column(db.String, nullable=True, comment="論理削除日時 (ISO 8601形式)")
-    deleted_by = db.Column(db.String, nullable=True, comment="論理削除を実行したユーザーのID")
-
     # ユーザー情報
     id = db.Column(db.String, primary_key=True, nullable=False, comment="社員番号 (ユーザーIDとして使用)")
     type = db.Column(db.String, nullable=False, default="users", comment="ドキュメントタイプ (固定値: 'users')")
@@ -33,6 +19,20 @@ class Users(db.Model):
     affiliation = db.Column(db.JSON, nullable=True, default=[], comment="所属グループの配列 (例: ['営業', 'admin'])")
     last_login_at = db.Column(db.String, nullable=True, comment="最後にログインした日時 (ISO 8601形式)")
     likes = db.relationship('Like', back_populates='user', lazy=True)
+
+    # 論理削除関連
+    is_deleted = db.Column(db.Boolean, nullable=False, default=False, comment="論理削除フラグ (true/false)")
+    deleted_at = db.Column(db.String, nullable=True, comment="論理削除日時 (ISO 8601形式)")
+    deleted_by = db.Column(db.String, nullable=True, comment="論理削除を実行したユーザーのID")
+
+    # 基本項目
+    create_at = db.Column(db.String, nullable=False, default="(システム日時)", comment="レコード作成日時 (ISO 8601形式)")
+    create_by = db.Column(db.String, nullable=False, comment="レコード作成者")
+    update_at = db.Column(db.String, nullable=False, default="(システム日時)", comment="レコード更新日時 (ISO 8601形式)")
+    update_by = db.Column(db.String, nullable=False, comment="レコード更新者")
+    version = db.Column(db.Integer, nullable=False, default=0, comment="更新回数 (初期値: 0)")
+    _ts = db.Column(db.Integer, nullable=False, comment="CosmosDBの内部タイムスタンプ")
+    _etag = db.Column(db.String, nullable=False, comment="CosmosDBの排他制御トークン")
 
     def __repr__(self):
         return f"<User {self.id} - {self.name}>"

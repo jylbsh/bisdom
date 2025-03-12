@@ -85,6 +85,10 @@ def add_new_knowledge(data:dict[str,str|int|None]) -> Tuple[dict[str,str|Model],
         if "author_id" not in data or len(data["author_id"])<1: 
             return {"message":ErrorMessages.ERROR_ID_007E},99
         
+        # create_byとupdate_byをauthor_idに設定する
+        insert_data["create_by"] = data["author_id"]
+        insert_data["update_by"] = data["author_id"]
+        
         # 挿入データを更新
         insert_data.update({k:v for k,v in data.items() if k in insert_data})
         
