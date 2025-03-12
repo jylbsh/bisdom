@@ -448,12 +448,24 @@ def chat():
     if not data or 'message' not in data:
         return jsonify({"error": "メッセージが送信されていません"}), 400
 
-    user_message = data['message']
-    print(f"User message: {user_message}")
-    conversation.append({"role": "user", "content": user_message})
+    # 受信した history を検証し、正しい形式のもののみ利用
+    conversation_history = data.get("history", [])
+    valid_history = []
+    for msg in conversation_history:
+        if isinstance(msg, dict) and "role" in msg and "content" in msg:
+            print(msg)
+            valid_history.append(msg)
+        else:
+            print("無効な会話履歴の項目をスキップ:", msg)
 
-    response_text = chat_with_openai(conversation)
-    conversation.append({"role": "assistant", "content": response_text})
+    # ユーザーからのメッセージを追加
+    user_message = data["message"]
+    print(f"User message: {user_message}")
+    valid_history.append({"role": "user", "content": user_message})
+
+    # OpenAI のチャット API 呼び出し
+    response_text = chat_with_openai(valid_history)
+    valid_history.append({"role": "assistant", "content": response_text})
     print(f"Assistant response: {response_text}")
 
-    return jsonify({"content": response_text}), 200
+    return jsonify({"content": response_text, "history": valid_history}), 200

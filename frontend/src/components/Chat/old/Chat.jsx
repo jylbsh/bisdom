@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import apiRequest from "../Request-manage/request";
+import apiRequest from "../../Request-manage/request";
 import "./Chat.css";
 
 const Chat = () => {
   const [messages, setMessages] = useState([
-    { sender: "ai", content: "こんにちは！どうしましたか？" }
+    { role: "assistant", content: "こんにちは！どうしましたか？" }
   ]);
   const [input, setInput] = useState("");
 
@@ -13,22 +13,23 @@ const Chat = () => {
     if (input.trim() === "") return;
     
     // ユーザーメッセージを追加
-    const userMessage = { sender: "user", content: input };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    const userMessage = { role: "user", content: input };
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     
     const currentInput = input;
     setInput("");
 
     try {
-      // /chat エンドポイントに POST リクエストを送信
-      const response = await apiRequest.post("/chat", { message: currentInput });
+      // /chat エンドポイントに POST リクエストを送信（history情報も渡す）
+      const response = await apiRequest.post("/chat", { message: currentInput, history: newMessages });
       // レスポンスの内容を AI の回答として設定
-      const aiResponse = { sender: "ai", content: response.data.content };
-      setMessages((prevMessages) => [...prevMessages, aiResponse]);
+      const assistantResponse = { role: "assistant", content: response.data.content };
+      setMessages((prevMessages) => [...prevMessages, assistantResponse]);
     } catch (error) {
       console.error("チャットリクエストに失敗しました", error);
-      const aiResponse = { sender: "ai", content: "エラーが発生しました。" };
-      setMessages((prevMessages) => [...prevMessages, aiResponse]);
+      const assistantResponse = { role: "assistant", content: "エラーが発生しました。" };
+      setMessages((prevMessages) => [...prevMessages, assistantResponse]);
     }
   };
 
@@ -37,15 +38,15 @@ const Chat = () => {
       <div className="chat-interface">
         <div className="chat-window">
           {messages.map((message, index) => (
-            // ユーザー側のレイアウト不具合のため、ai側のレイアウトを適用
-            <div key={index} className={`chat-message ${message.sender === "user" ? "ai" : "ai"}`}>
+            // ロールに応じたレイアウトを適用
+            <div key={index} className={`chat-message ${message.role === "user" ? "assistant" : "assistant"}`}>
               <div className="message-content">{message.content}</div>
             </div>
           ))}
         </div>
         <form className="chat-input-area" onSubmit={handleSend}>
           <input
-            type="content"
+            type="text"
             placeholder="メッセージを入力してください..."
             value={input}
             onChange={(e) => setInput(e.target.value)}

@@ -38,7 +38,7 @@
 }
 
 /* AI側のメッセージ */
-.chat-message.ai {
+.chat-message.assistant {
     justify-content: flex-start;
 }
 
@@ -54,7 +54,7 @@
 }
 
 /* AI側の吹き出し */
-.chat-message.ai .message-content {
+.chat-message.assistant .message-content {
     /* background-color: #d0f0fd; AI側ならば薄い青などの色を指定 */
     background-color: #e0e0e0;
 }

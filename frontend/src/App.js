@@ -1,7 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // React Routerをインポート
 import Home from './components/Home/Home'; // ホームページコンポーネント
-import Chat from './components/Chat/Chat'; // ホームページコンポーネント
+// import Chat from './components/Chat/Chatbot'; // ホームページコンポーネント
+import Chatold from './components/Chat/old/Chat'; // ホームページコンポーネント
 import Delete from './components/Delete/Delete';
 import KnowledgeDetail from './components/KnowledgeDetail/Knowledge_Detail';
 import Login from './components/Login/Login';
@@ -22,7 +23,11 @@ function App() {
         <div className="MainContent">
           <Routes>
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
-            <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
+            
+            {/* チャットUIが安定しないため暫定のものを使用 */}
+            {/* <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} /> */}
+            <Route path="/chat" element={<PrivateRoute><Chatold /></PrivateRoute>} />
+
             <Route path="/delete" element={<PrivateRoute><Delete /></PrivateRoute>} />
             <Route path="/knowledge/write" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
             <Route path="/knowledge/update" element={<PrivateRoute><WriteKnowledge /></PrivateRoute>} />
