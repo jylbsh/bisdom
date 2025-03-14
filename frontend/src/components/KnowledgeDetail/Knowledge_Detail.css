@@ -3,7 +3,9 @@
   background-color: #E5E5E5;
   color: black;
   padding: 20px;
-  margin-left: 50px; /* サイドバーの幅に合わせる */
+  margin-left: 50px;
+  min-height: 100vh;
+  overflow-y: auto; /* 内容が多い場合のみスクロールバーが表示されます */
 }
 
 /* タイトル */
@@ -43,7 +45,7 @@
   padding: 8px;
   border: 1px solid #ddd;
   text-align: left;
-  width:200px;
+  width: 200px;
 }
 
 .title-table td:first-child {
@@ -57,6 +59,7 @@
 .tags-table {
   width: 100%;
   border-collapse: collapse;
+  margin-left: 50px; /* 追加 */
 }
 
 .tags-table td {
@@ -76,13 +79,14 @@
 .info-table {
   width: 100%;
   border-collapse: collapse;
+  margin-left: 50px; /* 追加 */
 }
 
 .info-table td {
   padding: 8px;
   border: 1px solid #ddd;
   text-align: left;
-  width:150px;
+  width: 150px;
 }
 
 .info-table td:first-child,
@@ -99,17 +103,17 @@
 }
 
 .tags-table td:first-child {
-    display:flex;
-    text-align: center;
-    flex: 1;
-    margin-left: 20px;
-}
-
-.tags-table td:nth-child(2){
-  display:flex;
+  display: flex;
+  text-align: center;
   flex: 1;
   margin-left: 20px;
-  width:500px;
+}
+
+.tags-table td:nth-child(2) {
+  display: flex;
+  flex: 1;
+  margin-left: 20px;
+  width: 500px;
 }
 
 .info-table {
@@ -117,48 +121,48 @@
   margin-right: 20px;
 }
 
-.knowledgeDetail-table{
-    width:100%;
-    border-collapse: collapse;
+.knowledgeDetail-table {
+  width: 1000px;
+  border-collapse: collapse;
+  margin-left: 50px; /* 追加 */
 }
 
 .knowledgeDetail-table td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    width:150px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  width: 150px;
 }
 
 .knowledgeDetail-table td:first-child {
-    display:flex;
-    text-align: center;
-    background-color: #f2f2f2;
-    flex: 1;
-    margin-left: 20px;
-}
-
-.knowledgeDetail-table td:nth-child(2){
-  display:flex;
+  display: flex;
+  text-align: center;
+  background-color: #f2f2f2;
   flex: 1;
   margin-left: 20px;
-  width:96%;
+}
+
+.knowledgeDetail-table td:nth-child(2) {
+  display: flex;
+  flex: 1;
+  margin-left: 20px;
+  width: 96%;
   text-align: left;
   flex-direction: column;
 }
 
-
 /* ボタンのホバー時 */
 .side-button:hover {
-  background-color: #5281aa;  /* ホバー時の背景色 */
-  cursor: pointer;  /* ホバー時のカーソルをポインターに */
+  background-color: #5281aa; /* ホバー時の背景色 */
+  cursor: pointer; /* ホバー時のカーソルをポインターに */
   transition: background-color 0.3s ease; /* 色変更をスムーズに */
 }
 
 /* ボタンを右揃えにする */
 .button-container {
   display: flex; /* 子要素を横並びにする */
-  justify-content: flex-end;  /* 子要素を右揃え */
+  justify-content: flex-end; /* 子要素を右揃え */
   gap: 10px; /* ボタンの間隔を追加 */
-  margin-left:auto;
+  margin-left: auto;
 }
 
 /* ボタンスタイル */
@@ -197,5 +201,15 @@
 /* 星の形（Unicode星を使っている場合） */
 .star::before {
   content: "★"; /* 星形 */
+}
+
+/* 既存のスタイルは変更せず、ナレッジ詳細部分のみスクロール可能にします */
+
+.knowledgeDetail-content {
+  max-height: 200px;    /* 必要に応じて高さを調整してください */
+  overflow-y: auto;     /* コンテンツが高さを超えた場合にスクロール */
+  padding: 10px;
+  background-color: #fff; /* 必要に応じて背景色を設定 */
+  border-radius: 5px;
 }
 

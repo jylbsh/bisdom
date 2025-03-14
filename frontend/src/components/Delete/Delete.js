@@ -1,90 +1,71 @@
-import React, { useState } from "react";
-import "./Delete.css"; // 外部CSSファイルをインポート
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Delete.css";
+import { apiRequest } from "../Request-manage/request";
 
-  function Delete(){
-    const [message, setMessage] = useState("");
-/*
-    //サーバから投稿タイトルを取得する→URL未定義
-    
-    const fetchData_detail = async () => {
-        try {
-          const response = await fetch("http://127.0.0.1:8080/", {
-            method: "GET",
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-    
-          const data = await response.text();
-          console.log("Deleted data:", data); // コンソールにデータを表示
-          setMessage(data ? JSON.stringify(data) : "No data available"); // dataが空の場合、デフォルトメッセージを設定
-          setItems(data.items); // サーバーから取得したデータをセット
-        } catch (error) {
-          console.error("Fetch error: ", error);
-          setMessage("Error occurred while deleting");
-        }
-      };
-*/
+function Delete() {
+  const [message, setMessage] = useState("");
+  const [items, setItems] = useState([]);
+  const navigate = useNavigate();
 
-      const fetchData_delete = async () => {
-        try {
-          const response = await fetch("http://127.0.0.1:8080/delete", {
-            method: "DELETE",
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-    
-          const data = await response.text();
-          console.log("Deleted data:", data); // コンソールにデータを表示
-          setMessage(data ? JSON.stringify(data) : "No data available"); // dataが空の場合、デフォルトメッセージを設定
-        } catch (error) {
-          console.error("Delete error: ", error);
-          setMessage("Error occurred while deleting");
-        }
-      }
-
-    const [items] = useState([
-        "test1",
-        "test2",
-        "test3",
-        "test4",
-        "test5",
-        "test6",
-        "test7",
-        "test8",
-        "test9",
-        "test10",
-      ]);
-
-    return (
-        <>
-          <div className="narrage-list">ナレッジリスト</div>
-          <div className="delete-container">
-            {items.map((item, index) => (
-              <div key={index} className="item-row">
-                <div className="narrage-title">
-                  <div>{item}</div>
-                </div>
-                <div>
-                <button 
-                  className="detail-button"
-                  /*onClick={fetchData_detail}*/
-                  >
-                  詳細
-                </button>
-                  <button
-                  className="delete-button"
-                  onClick={fetchData_delete}
-                  >
-                    削除
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      );
+  const fetchData_delete = async (item) => {
+    // 確認ポップアップの表示（「はい」→true、「いいえ」→false）
+    if (!window.confirm("本当に削除しますか？")) {
+      return;
     }
+    try {
+      const response = await apiRequest.delete(`/knowledge/delete/${item.id}`);
+      console.log("Deleted data:", response.data);
+      alert(response.data ? JSON.stringify(response.data) : "No data available");
+      } catch (error) {
+      console.error("Delete error: ", error);
+      alert("Error occurred while deleting");
+    }
+  };
+
+  const fetchMeisaiAll = async () => {
+    try {
+      const response = await apiRequest.get("/knowledge/get/meisai", { all: true });
+      console.log("全件取得結果:", response.data);
+      setItems(response.data);
+    } catch (error) {
+      console.error("全件取得エラー:", error);
+      alert("全件取得エラーが発生しました");
+    }
+  };
+
+  useEffect(() => {
+    fetchMeisaiAll();
+  }, []);
+
+  return (
+    <>
+      <div className="narrage-list">ナレッジリスト</div>
+      <div className="delete-container">
+        {items.map((item, index) => (
+          <div key={index} className="item-row">
+            <div className="narrage-title">
+              <div>{item.title}</div>
+            </div>
+            <div>
+              <button
+                className="detail-button"
+                onClick={() =>
+                  navigate("/knowledge/detail", { state: { knowledgeData: item } })
+                }
+              >
+                詳細
+              </button>
+              <button className="delete-button" onClick={() => fetchData_delete(item)}>
+                削除
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+      {message && <p>{message}</p>}
+    </>
+  );
+}
 
 export default Delete;

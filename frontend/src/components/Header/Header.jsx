@@ -23,7 +23,7 @@ const Header = () => {
   // 検索アイコンをクリックしたときにAPIをリクエスト
   const handleSearch = async () => {
     try {
-      const params = { keyword: searchText, searchType: 'title' };
+      const params = { keyword: searchText, searchType: 'title' ,fuzzy: 'true'};
       const response = await apiRequest.get('/knowledge/get/meisai', params);
       const data = response.data;
       console.log('検索結果:', data);
@@ -50,7 +50,13 @@ const Header = () => {
     <div className="box">
       <div className="rectangle" />
       <div className="image">
-        <img className="element" alt="Element" src={x1} />
+        <img 
+          className="element" 
+          alt="Element" 
+          src={x1} 
+          onClick={() => navigate('/')}
+          style={{ cursor: 'pointer' }}  // マウスカーソルをポインターに変更
+        />
       </div>
       {/* search-wrapper を追加 */}
       <div className="search-wrapper" style={{ position: 'relative' }}>

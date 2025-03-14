@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import sidebarIcon from '../../assets/image/sidebar.png'; // ハンバーガーボタンの画像
 import s1 from '../../assets/image/home.png'; 
 import s2 from '../../assets/image/chat.png';
-import s3 from '../../assets/image/bookmark.png';
+import s3 from '../../assets/image/pencil.png';
 import s4 from '../../assets/image/admin.png';
 import s5 from '../../assets/image/delete.png';
 
@@ -42,16 +42,27 @@ function Sidebar() {
             {isOpen && <Link to="/chat">AIチャット</Link>}
           </li>
           <li>
-            <button className="sidebar-button" onClick={() => window.location.href = '/favorite'}>
-              <img src={s3} alt="Bookmark Icon" />
+            <button className="sidebar-button" onClick={() => window.location.href = '/knowledge/write'}>
+              <img src={s3} alt="Pencil Icon" />
             </button>
-            {isOpen && <Link to="/favorite">ブックマーク</Link>}
+            {isOpen && <Link to="/knowledge/write">ナレッジ登録</Link>}
           </li>
           <li>
-            <button className="sidebar-button" onClick={() => window.location.href = '/favorite'}>
+            {/* <button className="sidebar-button" onClick={() => window.location.href = '/admin'}> */}
+            <button 
+              className="sidebar-button" 
+              onClick={() => {
+                alert('準備中: 管理者機能');
+                return false;
+              }}
+            >
               <img src={s4} alt="Admin Icon" />
             </button>
-            {isOpen && <Link to="/admin">管理者機能</Link>}
+            {/* {isOpen && <Link to="/admin">管理者機能</Link>} */}
+            {isOpen && <Link to="/admin" onClick={(e) => {
+              e.preventDefault();
+              alert('準備中: 管理者機能');
+            }}>管理者機能</Link>}
           </li>
           <li>
             <button className="sidebar-button" onClick={() => window.location.href = '/delete'}>
