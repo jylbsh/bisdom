@@ -48,7 +48,7 @@ const Editor = ({ onDataSubmit }) => {
         <ReactQuill
           className='write-knowledge-editorbox'
           value={value}
-          placeholder='ナレッジ作成'
+          placeholder='ナレッジ情報を入力...'
           onChange={handleChange}
           modules={modules}
         />

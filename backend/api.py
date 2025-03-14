@@ -113,6 +113,14 @@ def add_knowledge():
         # トークンからユーザ情報を取得
         current_user_id = request.args.get('author_id', get_jwt_identity())        
         print(f"Current user ID: {current_user_id}")
+
+        # POSTデータのデバッグ出力を追加
+        data = request.get_json()
+        print("=== Received POST Data ===")
+        print(f"Title: {data.get('title')}")
+        print(f"Tags: {data.get('tags')}")
+        print(f"Content: {data.get('contents')[:100]}...") # コンテンツは最初の100文字のみ表示
+        print("========================")
         
         data:dict|None = request.get_json()
         data["author_id"] = current_user_id
@@ -310,7 +318,7 @@ def get_knowledge_meisai():
                 "image_path": k.image_path,
                 # "links": k.links,
                 # "editors": k.editors,
-                # "viewer_count": k.viewer_count,
+                "viewer_count": int(k.viewer_count/2), # 不具合：count時に2倍になっているので半分にする(frontend起因)
                 # "bookmark_count": k.bookmark_count,
                 # "likes": k.likes,
             })
@@ -437,6 +445,32 @@ def delete_knowledge(knowledge_id):
 
         db.session.commit()
         return jsonify({"message": "ナレッジの削除に成功しました", "knowledge_id": knowledge_id}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": f"エラーが発生しました: {e}"}), 500
+
+@app.route('/knowledge/viewcount/<string:knowledge_id>', methods=['PUT'])
+def increment_view_count(knowledge_id):
+    """
+    ナレッジの閲覧数を増やすエンドポイント
+    URL: PUT /knowledge/viewcount/<knowledge_id>
+    
+    リクエストJSON例:
+    {
+        "knowledge_id": "1"
+    }
+    """
+    try:
+        # 対象ナレッジを取得
+        knowledge = Knowledge.query.filter_by(id=knowledge_id).first()
+        if not knowledge:
+            return jsonify({"message": "対象のナレッジが見つかりませんでした"}), 404
+
+        # 閲覧数を増やす
+        knowledge.viewer_count += 1
+        db.session.commit()
+        return jsonify({"message": "ナレッジの閲覧数を増やしました", "knowledge_id": knowledge_id}), 200
 
     except Exception as e:
         db.session.rollback()

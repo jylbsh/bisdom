@@ -50,7 +50,13 @@ const Header = () => {
     <div className="box">
       <div className="rectangle" />
       <div className="image">
-        <img className="element" alt="Element" src={x1} />
+        <img 
+          className="element" 
+          alt="Element" 
+          src={x1} 
+          onClick={() => navigate('/')}
+          style={{ cursor: 'pointer' }}  // マウスカーソルをポインターに変更
+        />
       </div>
       {/* search-wrapper を追加 */}
       <div className="search-wrapper" style={{ position: 'relative' }}>
