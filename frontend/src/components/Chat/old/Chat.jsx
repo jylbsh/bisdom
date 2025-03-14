@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
 import apiRequest from "../../Request-manage/request";
 import "./Chat.css";
 
@@ -7,6 +8,7 @@ const Chat = () => {
     { role: "assistant", content: "こんにちは！どうしましたか？" }
   ]);
   const [input, setInput] = useState("");
+  const chatWindowRef = useRef(null);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -23,7 +25,6 @@ const Chat = () => {
     try {
       // /chat エンドポイントに POST リクエストを送信（history情報も渡す）
       const response = await apiRequest.post("/chat", { message: currentInput, history: newMessages });
-      // レスポンスの内容を AI の回答として設定
       const assistantResponse = { role: "assistant", content: response.data.content };
       setMessages((prevMessages) => [...prevMessages, assistantResponse]);
     } catch (error) {
@@ -33,14 +34,24 @@ const Chat = () => {
     }
   };
 
+  useEffect(() => {
+    // 新規メッセージが追加されたら chat-window の最下部にスクロールする
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <div className="chat-container">
       <div className="chat-interface">
-        <div className="chat-window">
+        <div className="chat-window" ref={chatWindowRef}>
           {messages.map((message, index) => (
-            // ロールに応じたレイアウトを適用
-            <div key={index} className={`chat-message ${message.role === "user" ? "assistant" : "assistant"}`}>
-              <div className="message-content">{message.content}</div>
+            <div key={index} className={`chat-message ${message.role === "assistant"? "assistant" : "assistant"}`}>
+              <div className="message-content">
+                {/* <ReactMarkdown> */}
+                  {message.content}
+                {/* </ReactMarkdown> */}
+              </div>
             </div>
           ))}
         </div>
