@@ -4,6 +4,7 @@
     align-items: center;
 
     margin: 3% 3%;
+    margin-left: 80px;
 
     border: 1px solid #8188D8;
     background-color: #F2F3FF;
@@ -59,4 +60,17 @@
 
     color: #ffffff;
     font-weight: bold;
+    cursor: pointer;  /* ポインターカーソルを追加 */
+    transition: background-color 0.3s ease; /* アニメーション効果を追加 */
+}
+
+/* ホバー時のスタイル */
+.write-knowledge-send-button:hover {
+    background-color: #5961B3;
+}
+
+/* クリック時（アクティブ時）のスタイル */
+.write-knowledge-send-button:active {
+    background-color: #3941A0;
+    transform: scale(0.98); /* わずかに縮小する効果を追加 */
 }

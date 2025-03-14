@@ -12,7 +12,7 @@ from flask_jwt_extended import JWTManager, create_access_token, create_refresh_t
 
 from utils import add_new_knowledge,get_knowledge_by_id,update_knowledge,get_user_by_id
 import messages
-import chatbotBaseAI
+from chatbotBaseAI import chat_with_openai, conversation
 from model.models import db, Users, Group, Knowledge, Like
 
 with app.app_context():
@@ -55,7 +55,8 @@ def auth():
         access_token = create_access_token(identity=user.id)
         refresh_token = create_refresh_token(identity=user.id)
         response = jsonify({
-            "authToken": access_token
+            "authToken": access_token,
+            "refresh_token": refresh_token
         })      
         
         set_refresh_cookies(response, refresh_token)
@@ -76,6 +77,15 @@ def refresh():
     new_access_token = create_access_token(identity=current_user)
 
     return jsonify({"access_token": new_access_token}), 200
+@app.route('/api/auth/check', methods=['GET'])
+@jwt_required()
+def check_auth():
+    try:
+        # トークンが有効であれば、ユーザーIDを取得
+        current_user_id = get_jwt_identity()
+        return jsonify({"msg": "Token is valid", "user_id": current_user_id}), 200
+    except Exception as e:
+        return jsonify({"msg": "Token is invalid", "error": str(e)}), 401
 @app.route('/knowledge/<id>',methods=["GET"])
 @jwt_required()
 def move_to_knowledge_detail(id):
@@ -100,7 +110,20 @@ def add_knowledge():
     if request.method == 'get':
         return jsonify({"message":"Access Denied"}),400
     try:
+        # トークンからユーザ情報を取得
+        current_user_id = request.args.get('author_id', get_jwt_identity())        
+        print(f"Current user ID: {current_user_id}")
+
+        # POSTデータのデバッグ出力を追加
+        data = request.get_json()
+        print("=== Received POST Data ===")
+        print(f"Title: {data.get('title')}")
+        print(f"Tags: {data.get('tags')}")
+        print(f"Content: {data.get('contents')[:100]}...") # コンテンツは最初の100文字のみ表示
+        print("========================")
+        
         data:dict|None = request.get_json()
+        data["author_id"] = current_user_id
         result,exit_code = add_new_knowledge(data)
         match exit_code:
             case 0:
@@ -224,35 +247,87 @@ def get_users():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+from flask_jwt_extended import get_jwt_identity
 @app.route('/knowledge/get/meisai', methods=['GET'])
+@jwt_required()
 def get_knowledge_meisai():
-    knowledge_id = request.args.get('knowledge_id')
-    if knowledge_id is None:
-        raise messages.ApplicationException(messages.ErrorMessages.ERROR_ID_0003E.value, 404)
+    print(request.args)
+    keyword = request.args.get('keyword')
+    searchType = request.args.get('searchType')
+    fuzzy = request.args.get('fuzzy')
+    selfPost = request.args.get('selfPost')
+    favorite = request.args.get('favorite')
+    allGet = request.args.get('all')
+
+    # トークンからユーザ情報を取得
+    current_user_id = get_jwt_identity()
+    print(f"Current user ID: {current_user_id}")
+
+    if (not keyword) & (allGet != 'true') & (selfPost != 'true') & (favorite != 'true'):
+        return jsonify({"error": messages.ErrorMessages.ERROR_ID_0004E.value}), 404
+    print(f"Keyword: {keyword}, searchType: {searchType}, fuzzy: {fuzzy}, selfPost: {selfPost}, favorite: {favorite}, all:{allGet}")
 
     try:
-        # SQLAlchemyを使用してデータを取得
-        knowledge = Knowledge.query.filter_by(id=knowledge_id).first()
+        # 条件に応じてクエリを生成
+        if allGet == 'true':
+            knowledge = Knowledge.query.filter_by(is_deleted=False).all()
+        elif selfPost == 'true':
+            knowledge = Knowledge.query.filter_by(author_id=current_user_id, is_deleted=False).all()
+        elif searchType in ['id', 'title', 'tag']:
+            column_map = {'id': 'id', 'title': 'title', 'tag': 'tags'}
+            col_name = column_map[searchType]
+            col = getattr(Knowledge, col_name)
+            
+            if fuzzy:
+                knowledge = Knowledge.query.filter(col.like(f"%{keyword}%"), Knowledge.is_deleted==False).all()
+            else:
+                knowledge = Knowledge.query.filter_by(**{col_name: keyword, "is_deleted": False}).all()
+        else:
+            # 該当条件がなければ空リストを返すかエラーハンドリング
+            knowledge = []
+        
+        # 検索件数をログ出力
+        app.logger.info(f"検索結果件数: {len(knowledge)}, keyword: {keyword}, searchType: {searchType}")
 
-        if knowledge is None:
+        # if knowledge is None:
+        if not knowledge:
             return jsonify({"error": "No data found"}), 404
 
         # データを辞書形式に変換
-        knowledge_data = {
-            "id": knowledge.id,
-            "title": knowledge.title,
-            "content": knowledge.content,
-            "created_at": knowledge.created_at,
-            "updated_at": knowledge.updated_at
-        }
+        knowledge_data = []
+        for k in knowledge:
+            knowledge_data.append({
+                "create_at": k.create_at,
+                "create_by": k.create_by,
+                "update_at": k.update_at,
+                "update_by": k.update_by,
+                # "version": k.version,
+                # "_ts": k._ts,
+                # "_etag": k._etag,
+                "is_deleted": k.is_deleted,
+                "deleted_at": k.deleted_at,
+                "deleted_by": k.deleted_by,
+                "id": k.id,
+                "type": k.type,
+                "title": k.title,
+                "content": k.content,
+                "author_id": k.author_id,
+                # "visibility": k.visibility,
+                # "visible_to_groups": k.visible_to_groups,
+                "tags": k.tags,
+                "image_path": k.image_path,
+                # "links": k.links,
+                # "editors": k.editors,
+                "viewer_count": int(k.viewer_count/2), # 不具合：count時に2倍になっているので半分にする(frontend起因)
+                # "bookmark_count": k.bookmark_count,
+                # "likes": k.likes,
+            })
 
         return jsonify(knowledge_data), 200
     except Exception as e:
+        # 例外の詳細をログに出力
+        app.logger.error(f"Error fetching knowledge data: {e}")
         return jsonify({"error": str(e)}), 500
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    user_input = request.json['message']
 
 #Knowledge Download API using knowledge_id
 @app.route('/downloadKnowledge/<knowledge_id>', methods=['GET'])
@@ -339,7 +414,8 @@ def send_like_request():
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
-@app.route('/knowledge/<string:knowledge_id>', methods=['DELETE'])
+@app.route('/knowledge/delete/<string:knowledge_id>', methods=['DELETE'])
+@jwt_required()  # JWT認証を追加
 def delete_knowledge(knowledge_id):
     """
     ナレッジの論理削除を行うエンドポイント
@@ -356,11 +432,15 @@ def delete_knowledge(knowledge_id):
         if not knowledge:
             return jsonify({"message": "対象のナレッジが見つかりませんでした"}), 404
 
+        # トークンからユーザ情報を取得
+        current_user_id = get_jwt_identity()
+        print(f"Current user ID: {current_user_id}")
+
         # ナレッジを論理削除するために状態を更新
         knowledge.is_deleted = True
         knowledge.deleted_at = datetime.now().isoformat()
         # リクエストの JSON から削除者の情報を取得、存在しなければ 'anonymous' を設定
-        deleted_by = request.json.get('deleted_by', 'anonymous')
+        deleted_by = current_user_id if current_user_id else 'anonymous'
         knowledge.deleted_by = deleted_by
 
         db.session.commit()
@@ -369,3 +449,57 @@ def delete_knowledge(knowledge_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": f"エラーが発生しました: {e}"}), 500
+
+@app.route('/knowledge/viewcount/<string:knowledge_id>', methods=['PUT'])
+def increment_view_count(knowledge_id):
+    """
+    ナレッジの閲覧数を増やすエンドポイント
+    URL: PUT /knowledge/viewcount/<knowledge_id>
+    
+    リクエストJSON例:
+    {
+        "knowledge_id": "1"
+    }
+    """
+    try:
+        # 対象ナレッジを取得
+        knowledge = Knowledge.query.filter_by(id=knowledge_id).first()
+        if not knowledge:
+            return jsonify({"message": "対象のナレッジが見つかりませんでした"}), 404
+
+        # 閲覧数を増やす
+        knowledge.viewer_count += 1
+        db.session.commit()
+        return jsonify({"message": "ナレッジの閲覧数を増やしました", "knowledge_id": knowledge_id}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": f"エラーが発生しました: {e}"}), 500
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    if not data or 'message' not in data:
+        return jsonify({"error": "メッセージが送信されていません"}), 400
+
+    # 受信した history を検証し、正しい形式のもののみ利用
+    conversation_history = data.get("history", [])
+    valid_history = []
+    for msg in conversation_history:
+        if isinstance(msg, dict) and "role" in msg and "content" in msg:
+            print(msg)
+            valid_history.append(msg)
+        else:
+            print("無効な会話履歴の項目をスキップ:", msg)
+
+    # ユーザーからのメッセージを追加
+    user_message = data["message"]
+    print(f"User message: {user_message}")
+    valid_history.append({"role": "user", "content": user_message})
+
+    # OpenAI のチャット API 呼び出し
+    response_text = chat_with_openai(valid_history)
+    valid_history.append({"role": "assistant", "content": response_text})
+    print(f"Assistant response: {response_text}")
+
+    return jsonify({"content": response_text, "history": valid_history}), 200

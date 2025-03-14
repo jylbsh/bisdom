@@ -47,7 +47,7 @@ def terminalChat():
         conversation.append({"role": "user", "content": user_input})
 
         response = chat_with_openai(conversation)
-        conversation.append({"role": "assistant", "content": reply})
+        conversation.append({"role": "assistant", "content": response})
 
         print(f"ボット： {response}")
 
@@ -60,7 +60,7 @@ def apiChat(user_input):
         conversation.append({"role": "user", "content": user_input})
 
         response = chat_with_openai(conversation)
-        conversation.append({"role": "assistant", "content": reply})
+        conversation.append({"role": "assistant", "content": response})
 
         return response
 

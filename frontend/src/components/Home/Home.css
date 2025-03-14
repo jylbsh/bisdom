@@ -3,6 +3,7 @@
   background-color: #E5E5E5;
   color: black;
   padding: 20px;
+  margin-left: 50px; /* サイドバーの幅に合わせる */
 }
 
 /* タブヘッダー */
@@ -32,5 +33,84 @@
   padding: 10px;
   background-color: white;
   border-radius: 5px;
+  max-height: calc(100vh - 150px); /* 画面の高さから余白を引いた値 */
+  overflow-y: auto; /* 縦方向のスクロールを有効化 */
 }
 
+/* スクロールバーのスタイリング */
+.tab-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tab-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.tab-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.tab-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.tab-content div {
+  margin-bottom: 20px;
+  /* padding: 15px; */
+  /* border: 1px solid #ccc; */
+  border-radius: 8px;
+}
+
+.tab-content-wrap {
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 5px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease; /* アニメーション効果を追加 */
+}
+
+.tab-content-wrap:hover {
+  background-color: #F5F5F5; /* ホバー時の背景色 */
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* ホバー時により強調されたシャドウ */
+}
+
+.content-static-info {
+  text-align: left;
+  margin-right: 20px;
+}
+
+.content-stateful-info {
+  text-align: right;
+  font-size: 13px;
+}
+
+.tab-content h2 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.tab-content p {
+  margin: 5px 0;
+  color: #333;
+}
+
+.tab-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.tab-content ul li {
+  margin: 10px 0;
+}
+
+.tab-content ul li a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.tab-content ul li a:hover {
+  text-decoration: underline;
+}

@@ -19,22 +19,29 @@ def get_knowledge_by_id(id:int) -> Knowledge:
 def messeage_generator(message_id:ErrorMessages,*args,**kwargs) -> str:
     return message_id.value.format(*args,**kwargs)
 
-def create_default_insert_data(model:Model) -> dict[str,str|None]:
+def create_default_insert_data(model: Model) -> dict[str, str | None]:
     """
     DBの登録データの初期設定
 
     Parameters:
-    model(Model): 事前に設定したModel
+      model(Model): 事前に設定したModel
 
     Return:
-    default_insert_data(dict[str,str|None]): 初期設定された登録データ(作成日時および作成者)
+      default_insert_data(dict[str, str | None]): 初期設定された登録データ(作成日時および作成者)
     """
-    default_insert_data:dict[str,str|None] = {column:None for column in model.__dict__ if not column.startswith("_")}
-    if "create_at" in default_insert_data:default_insert_data["create_at"] = datetime.now()
-    if "create_by" in default_insert_data:default_insert_data["create_by"] = CreateBy.SYSTEM
-    if "update_at" in default_insert_data:default_insert_data["update_at"] = datetime.now()
-    if "update_by" in default_insert_data:default_insert_data["update_by"] = CreateBy.SYSTEM
+    default_insert_data: dict[str, str | None] = {
+        column: None for column in model.__dict__ if not column.startswith("_")
+    }
+    if "create_at" in default_insert_data:
+        default_insert_data["create_at"] = datetime.now().isoformat()
+    if "create_by" in default_insert_data:
+        default_insert_data["create_by"] = str(CreateBy.SYSTEM)
+    if "update_at" in default_insert_data:
+        default_insert_data["update_at"] = datetime.now().isoformat()
+    if "update_by" in default_insert_data:
+        default_insert_data["update_by"] = str(CreateBy.SYSTEM)
     return default_insert_data
+
 @transactional
 def update_knowledge(data:dict[str,str|int|None]) -> Tuple[dict[str,str|Model],int]:
     if "id" not in data:return {"message":ErrorMessages.ERROR_ID_005E},99
@@ -59,7 +66,7 @@ def add_new_knowledge(data:dict[str,str|int|None]) -> Tuple[dict[str,str|Model],
     """
     ナレッジの追加
     
-    Paramters:
+    Parameters:
     data(dict): ナレッジ登録用データ
 
     Return:
@@ -67,18 +74,38 @@ def add_new_knowledge(data:dict[str,str|int|None]) -> Tuple[dict[str,str|Model],
     exit_code(int): 処理結果
     """
     try:
+        # デフォルトの挿入データを作成
         insert_data:dict[str,None|str] = create_default_insert_data(Knowledge)
-        if "contents" not in data: return {"message":ErrorMessages.ERROR_ID_009E},99
-        if "title" not in data or len(data["title"])<1: return {"message":ErrorMessages.ERROR_ID_008E},99
-        if "author_id" not in data or len(data["author_id"])<1: return {"message":ErrorMessages.ERROR_ID_007E},99
+        
+        # データの検証
+        if "contents" not in data: 
+            return {"message":ErrorMessages.ERROR_ID_009E},99
+        if "title" not in data or len(data["title"])<1: 
+            return {"message":ErrorMessages.ERROR_ID_008E},99
+        if "author_id" not in data or len(data["author_id"])<1: 
+            return {"message":ErrorMessages.ERROR_ID_007E},99
+        
+        # create_byとupdate_byをauthor_idに設定する
+        insert_data["create_by"] = data["author_id"]
+        insert_data["update_by"] = data["author_id"]
+        
+        # 挿入データを更新
         insert_data.update({k:v for k,v in data.items() if k in insert_data})
+        
+        # HTMLのサニタイジング
         html,result = sanitize_quill_html(data["contents"])
-        if result:return {"message":ErrorMessages.ERROR_ID_006E},99
+        if result:
+            return {"message":ErrorMessages.ERROR_ID_006E},99
         insert_data["content"] = html
+        
+        # UUIDを生成してIDとして設定
         insert_data["id"] = str(uuid.uuid4())
-        knowledge = Knowledge(**insert_data)
-        db.session.add(knowledge)
-        return {"message":"登録完了した","knowledge_id":knowledge.id},0
+        
+        # Knowledgeオブジェクトを作成し、データベースに追加
+        k = Knowledge(**insert_data)
+        db.session.add(k)
+        
+        return {"message":"登録完了した","knowledge_id":k.id},0
     except Exception as e:
         return {"message":f"ナレッジの登録中にエラーが発生しました、エラーメッセージ:{e}"},99
 def sanitize_quill_html(content:str|None) -> Tuple[str,int]:

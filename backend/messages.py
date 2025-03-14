@@ -20,7 +20,7 @@ class ErrorMessages(Enum):
     ERROR_ID_0001E = {'message':"test","id":"001E"}
     ERROR_ID_0002E = '{0}が埋め込んでない'
     ERROR_ID_0003E = 'ナレッジが見つかりませんでした'
-    ERROR_ID_0004E = 'XXX'
+    ERROR_ID_0004E = '検索キーワードを入力してください。'
     ERROR_ID_0005E = 'ナレッジID不正'
     ERROR_ID_0006E = 'htmlのサニタイジングが失敗しました'
     ERROR_ID_0007E = 'ユーザーが未設定'

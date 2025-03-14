@@ -35,21 +35,34 @@
 }
 
 .search {
-  height: 53px; /* search-box�̍����ɍ��킹�Đe�v�f�̍����𒲐� */
+  height: 53px; /* 検索エリア全体の高さ */
   width: 650px;
-  position: fixed; /* fixed�ŉ�ʏ㕔�ɔz�u */
-  top: 1%; /* �㕔�ɔz�u */
-  left: 50%; /* �������̒����ɔz�u */
-  transform: translateX(-50%); /* ���̔����������ɃV�t�g���Ē����ɔz�u */
-  z-index: 10; /* �K�v�ɉ����đO�ʂɕ\�� */
+  position: fixed; /* 固定位置に配置 */
+  top: 1%; /* 上から1%の位置 */
+  left: 50%; /* 横幅の中央に配置 */
+  transform: translateX(-50%); /* 横方向の中央揃えを調整 */
+  z-index: 10; /* 前面に表示 */
 }
 
 .search .search-box {
   background-color: #f2f3ff;
   border-radius: 8px;
   height: 36px;
-  width: 100%; /* �e�v�f�ɍ��킹�ĉ���100%�� */
+  width: 100%; /* ボックスの幅を100%に設定 */
   margin-top: 5px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 550px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 40px;
 }
 
 .search-lens {

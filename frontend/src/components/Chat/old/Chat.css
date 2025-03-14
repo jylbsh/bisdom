@@ -1,0 +1,99 @@
+/* 大きな枠で囲むコンテナ */
+.chat-container {
+    /* border: 2px solid #a3abff; */
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem;
+    height: calc(100vh - 2rem);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* 全体レイアウト */
+.chat-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    margin-left: 5%;
+    /* width: 90%; */
+}
+
+/* チャットウィンドウ */
+.chat-window {
+    flex-grow: 1;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    overflow-y: auto;
+}
+
+/* メッセージ表示 */
+.chat-message {
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+/* ユーザー側のメッセージ */
+.chat-message.user {
+    justify-content: flex-end;
+}
+
+/* AI側のメッセージ */
+.chat-message.assistant {
+    justify-content: flex-start;
+}
+
+/* 共通の吹き出しスタイル */
+.chat-message .message-content {
+    display: inline-flex;
+    max-width: 80%; /* 吹き出しの最大幅を80%に設定 */
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    word-wrap: break-word;
+    text-align: left; /* デフォルトの左揃え */
+    white-space: pre-wrap;
+}
+
+/* AI側の吹き出し */
+.chat-message.assistant .message-content {
+    /* background-color: #d0f0fd; AI側ならば薄い青などの色を指定 */
+    background-color: #e0e0e0;
+}
+
+/* ユーザー側の吹き出し */
+.chat-message.user .message-content {
+    background-color: #e0e0e0;
+}
+
+/* 入力エリア */
+.chat-input-area {
+    display: flex;
+    padding: 1rem;
+    border-top: 1px solid #ddd;
+    background-color: #ccc; /* 背景色をグレーに設定 */
+    flex-shrink: 0;  /* これにより、入力エリアが縮まず常に表示されます */
+    margin-bottom: 2.5%; /* ボタンが画面に隠れないように余白を追加 */
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid #a3abff;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    margin-bottom: 5%;
+    height: 2.5rem; /* 高さを広げる */
+}
+
+.chat-input-area button {
+  padding: 0.5rem 1rem;
+  background-color: #a3abff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 3.5rem; /* ボタンの高さを入力フィールドと揃える */
+}
+
+.chat-input-area button:hover {
+    background-color: #e5e5e5;
+}

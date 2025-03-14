@@ -1,6 +1,7 @@
-// AuthContext.js
-import React, { createContext, useContext, useState,useMemo,useEffect } from "react";
+import React, { createContext, useContext, useState, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
+import { apiRequest } from "../Request-manage/request"; // ここでapiRequestをインポート
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -17,14 +18,14 @@ export const AuthProvider = ({ children }) => {
 
     checkAuthStatus();
   }, []);
-  const login = () => {
+  const login = (token) => {
     setIsAuthenticated(true);
-    localStorage.setItem("isAuthenticated", "true"); // ログイン時にlocalStorageに設定
+    localStorage.setItem("authToken", token); // ログイン時にトークンをlocalStorageに設定
   };
 
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.setItem("isAuthenticated","false"); // ログアウト時にlocalStorageから削除
+    localStorage.removeItem("authToken"); // ログアウト時にトークンをlocalStorageから削除
   };
   const value = useMemo(() => ({ isAuthenticated, login, logout }), [
     isAuthenticated,
@@ -39,10 +40,25 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
 AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };
+
 async function getAuthStatusFromAPI() {
-    return localStorage.getItem("isAuthenticated") === "true"; // 仮の例
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    return false;
+  } 
+
+  try {
+    const response = await apiRequest.get("/api/auth/check");
+    console.log(response);
+    return true;
+  } catch (error) {
+    console.error("Error checking auth status:", error);
+    return false;
+  }
 }
+
 export const useAuth = () => useContext(AuthContext);
