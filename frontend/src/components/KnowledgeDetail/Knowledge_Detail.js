@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react"; // useRefを追加
+import { useLocation, useNavigate } from 'react-router-dom';  // useNavigateを追加
 import "./Knowledge_Detail.css";
 import apiRequest from '../Request-manage/request'; // apiRequestをインポート
 
@@ -24,6 +24,8 @@ function Knowledge_Detail() {
     const [isLoading, setIsLoading] = useState(true);
     const [viewCountUpdated, setViewCountUpdated] = useState(false);  // 追加
     const location = useLocation();
+    const navigate = useNavigate();  // 追加
+    const containerRef = useRef(null);
 
     // タブ切り替え関数
     const handleTabChange = (tab) => {
@@ -95,6 +97,33 @@ function Knowledge_Detail() {
         fetchAndUpdateKnowledge();
     }, [location.state]); 
 
+    useEffect(() => {
+        const measureHeight = () => {
+            if (containerRef.current) {
+                // コンテナの高さを計測
+                const height = containerRef.current.offsetHeight;
+                console.log('コンテナの全体高さ:', height);
+
+                // ビューポートの高さを取得
+                const viewportHeight = window.innerHeight;
+                console.log('ビューポートの高さ:', viewportHeight);
+
+                // スクロール可能な高さを計算
+                const scrollHeight = containerRef.current.scrollHeight;
+                console.log('スクロール可能な高さ:', scrollHeight);
+            }
+        };
+
+        measureHeight();
+        
+        // リサイズ時にも高さを再計測
+        window.addEventListener('resize', measureHeight);
+        
+        return () => {
+            window.removeEventListener('resize', measureHeight);
+        };
+    }, [knowledgeData]); // knowledgeDataが更新されたときにも再計測
+
     // 知識データがまだない場合は、ローディング中のメッセージを表示
     if (isLoading) {
         return <div>Loading...</div>;
@@ -112,79 +141,144 @@ function Knowledge_Detail() {
         alert(message);
     };
 
-    return (
-        <div className="knowledge-detail">
-            <div className="meta-info">
-                <table className="title-table">
-                    <tbody>
-                        <tr>
-                            <td><strong>タイトル</strong></td>
-                            <td>{displayData.title}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <label className="star-rating">
-                    <input type="checkbox" className="star-checkbox" />
-                    <span className="star"></span>
-                </label>
-                <div className="button-container">
-                    <button id="updateBtn" className="side-button" onClick={() => showAlert('準備中')}>更新</button>
-                    <button id="downloadBtn" className="side-button" onClick={() => showAlert('準備中')}>ダウンロード</button>
+    // 更新ボタンのハンドラを追加
+    const handleUpdate = () => {
+        if (!displayData) {
+            alert('更新するデータがありません。');
+            return;
+        }
+
+        if (displayData.id === 'demo-1') {
+            alert('デモデータは更新できません。');
+            return;
+        }
+
+        // /knowledge/updateに画面のデータを渡しながら遷移
+        navigate('/knowledge/update', {
+            state: {
+                knowledgeData: displayData
+            }
+        });
+    };
+
+    // URLをハイパーリンクに変換し、改行で区切られた複数の情報を処理する関数
+    const convertUrlToLink = (text) => {
+        if (!text) return '';
+        
+        // 改行で分割
+        const lines = text.split('\n');
+        
+        // 各行を処理
+        return lines.map((line, lineIndex) => {
+            // URLを検出する正規表現
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            
+            // 各行のURLをリンクに変換
+            const processedLine = line.split(urlRegex).map((part, partIndex) => {
+                if (part.match(urlRegex)) {
+                    return (
+                        <a 
+                            key={`${lineIndex}-${partIndex}`}
+                            href={part}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {part}
+                        </a>
+                    );
+                }
+                return part;
+            });
+
+            // 各行を div で囲んで返す
+            return (
+                <div key={lineIndex} className="supplementary-info-line">
+                    {processedLine}
                 </div>
-            </div>
-            <div className="info-container">
-                <section className="meta-info">
-                    <table className="tags-table">
-                        <tbody>
-                            <tr>
-                                <td><strong>タグ</strong></td>
-                                <td>{displayData.tags}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-                <section className="meta-info">
-                    <table className="info-table">
-                        <tbody>
-                            <tr>
-                                <td><strong>作成者</strong></td>
-                                <td>{displayData.create_by}</td>
-                                <td><strong>作成日</strong></td>
-                                <td>{displayData.create_at}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>更新者</strong></td>
-                                <td>{displayData.update_by}</td>
-                                <td><strong>更新日</strong></td>
-                                <td>{displayData.update_at}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-            </div>
-            <div className="meta-info">
-                <section className="knowledge-detail">
-                    <table className="knowledgeDetail-table">
-                        <tbody>
-                            <tr>
-                                <td><strong>ナレッジ詳細</strong></td>
-                                <td className="knowledgeDetail-content" dangerouslySetInnerHTML={{ __html: displayData.content }} />
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-            </div>
-            <div className="KnowledgeDetail-info">
-                <section className="knowledge-detail">
-                    <table className="knowledgeDetail-table">
-                        <tbody>
-                            <tr>
-                                <td><strong>補足情報</strong></td>
-                                <td>{displayData.image_path}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+            );
+        });
+    };
+
+    return (
+        <div ref={containerRef} className="knowledge-detail-container">
+            <div className="knowledge-detail-inner">
+                {/* タイトルセクション */}
+                <div className="meta-info">
+                    <div className="title-section">
+                        <table className="title-table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>タイトル</strong></td>
+                                    <td>{displayData.title}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <label className="star-rating">
+                            <input type="checkbox" className="star-checkbox" />
+                            <span className="star"></span>
+                        </label>
+                    </div>
+                    <div className="button-container">
+                        <button className="side-button" onClick={handleUpdate}>更新</button>
+                        <button className="side-button" onClick={() => showAlert('準備中')}>ダウンロード</button>
+                    </div>
+                </div>
+
+                {/* 情報セクション */}
+                <div className="info-container">
+                    <section className="knowledge-detail-section">
+                        <table className="tags-table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>タグ</strong></td>
+                                    <td>{displayData.tags}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section className="knowledge-detail-section">
+                        <table className="info-table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>作成者</strong></td>
+                                    <td>{displayData.create_by}</td>
+                                    <td><strong>作成日</strong></td>
+                                    <td>{displayData.create_at}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>更新者</strong></td>
+                                    <td>{displayData.update_by}</td>
+                                    <td><strong>更新日</strong></td>
+                                    <td>{displayData.update_at}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+                <div className="KnowledgeDetail-info">
+                    <section className="knowledge-detail-section">
+                        <table className="knowledgeDetail-table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>補足情報</strong></td>
+                                    <td>{convertUrlToLink(displayData.image_path)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+                <div className="KnowledgeDetail-info">
+                    <section className="knowledge-detail-section">
+                        <table className="knowledgeDetail-table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>ナレッジ詳細</strong></td>
+                                    <td className="knowledgeDetail-content" dangerouslySetInnerHTML={{ __html: displayData.content }} />
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
             </div>
         </div>
     );

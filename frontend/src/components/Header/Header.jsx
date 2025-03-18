@@ -15,6 +15,13 @@ const Header = () => {
   const [showFlow, setShowFlow] = useState(false); // ポップアップ表示用 state
   const navigate = useNavigate();
 
+  // エンターキー押下時のハンドラを追加
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   // 入力ボックスの値が変更されたときに呼ばれるハンドラ
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
@@ -68,6 +75,7 @@ const Header = () => {
               className="search-input" 
               value={searchText}
               onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}  // エンターキーイベントを追加
             />
           </div>
           <div className="search-lens" onClick={handleSearch} style={{ cursor: 'pointer' }}>

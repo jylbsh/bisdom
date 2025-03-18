@@ -132,7 +132,7 @@ def add_knowledge():
                 return jsonify({"messages":result["message"],"knowledge_id":None,"is_author":None}),401
     except TransactionException as t:
         return jsonify({"messages":str(t),"knowledge_id":None,"is_author":None}),401
-@app.route('/modify-knowledge',methods=['POST','GET'])
+@app.route('/modify-knowledge',methods=['PUT'])
 @jwt_required()
 def modify_knowledge():
     """
@@ -145,15 +145,42 @@ def modify_knowledge():
     if request.method == 'get':
         return jsonify({"message":"Access Denied"}),400
     try:
-        data:dict|None = request.get_json()
-        result,exit_code = update_knowledge(data)
+        # トークンからユーザ情報を取得
+        current_user_id = request.args.get('author_id', get_jwt_identity())        
+        print(f"Current user ID: {current_user_id}")
+
+        # データを取得
+        data = request.get_json()
+
+        # PUTデータのデバッグ出力を追加
+        print("=== Received POST Data ===")
+        print(f"Title: {data.get('title')}")
+        print(f"Tags: {data.get('tags')}")
+        print(f"Content: {data.get('contents')[:100]}...") # コンテンツは最初の100文字のみ表示
+        print("========================")
+
+        # データにauthor_idを追加
+        data["author_id"] = current_user_id
+        result, exit_code = update_knowledge(data)
         match exit_code:
             case 0:
-                return jsonify({"messages":result["message"],"knowledge_id":result["knowledge_id"],"is_author":True}),200
+                return jsonify({
+                    "messages": result["message"].to_json() if hasattr(result["message"], 'to_json') else str(result["message"]),
+                    "knowledge_id": result["knowledge_id"],
+                    "is_author": True
+                }), 200
             case _:
-                return jsonify({"messages":result["message"],"knowledge_id":None,"is_author":None}),401
+                return jsonify({
+                    "messages": result["message"].to_json() if hasattr(result["message"], 'to_json') else str(result["message"]),
+                    "knowledge_id": None,
+                    "is_author": None
+                }), 401
     except TransactionException as t:
-        return jsonify({"messages":str(t),"knowledge_id":None,"is_author":None}),401
+        return jsonify({
+            "messages": str(t),
+            "knowledge_id": None,
+            "is_author": None
+        }), 401
         
         
 @app.route('/test', methods=['POST'])
@@ -351,9 +378,9 @@ def downloadKnowledge(knowledge_id):
     res.headers['Content-Disposition'] = 'attachment; filename=knowledge_'+ knowledge_id +'.csv'
     return res
     
-    # Get a response from the model
-    response = chatbotBaseAI.apiChat(user_input)
-    return jsonify({'response': response})
+    # # Get a response from the model
+    # response = chatbotBaseAI.apiChat(user_input)
+    # return jsonify({'response': response})
 
 #knowledge like API
 @app.route('/likeKnowledge', methods=['POST'])

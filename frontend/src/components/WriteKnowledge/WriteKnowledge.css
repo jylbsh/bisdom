@@ -1,15 +1,39 @@
 .write-knowledge-wrap-outline {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;  /* 上端揃えに変更 */
 
     margin: 3% 3%;
     margin-left: 80px;
+    max-height: 80vh;  /* ビューポートの80%を最大高さに設定 */
+    overflow-y: auto;  /* 垂直スクロールバーを追加 */
 
     border: 1px solid #8188D8;
     background-color: #F2F3FF;
-
     border-radius: 4px;
+
+    /* Firefox用のスクロールバーカスタマイズ */
+    scrollbar-width: thin;
+    scrollbar-color: #8188D8 #F2F3FF;
+}
+
+/* Webkit（Chrome、Safari等）用のスクロールバーカスタマイズ */
+.write-knowledge-wrap-outline::-webkit-scrollbar {
+    width: 8px;
+}
+
+.write-knowledge-wrap-outline::-webkit-scrollbar-track {
+    background: #F2F3FF;
+    border-radius: 4px;
+}
+
+.write-knowledge-wrap-outline::-webkit-scrollbar-thumb {
+    background: #8188D8;
+    border-radius: 4px;
+}
+
+.write-knowledge-wrap-outline::-webkit-scrollbar-thumb:hover {
+    background: #4A52A7;
 }
 
 .write-knowledge-wrap-inline {
@@ -73,4 +97,52 @@
 .write-knowledge-send-button:active {
     background-color: #3941A0;
     transform: scale(0.98); /* わずかに縮小する効果を追加 */
+}
+
+.write-knowledge-textarea {
+    margin: 2px 2px;
+    width: 90%;
+    min-height: 24px;
+    padding: 8px;
+    
+    border: none;
+    border-radius: 4px;
+    resize: vertical;  /* 垂直方向のリサイズを許可 */
+    overflow-y: auto;  /* 垂直スクロールバーを必要に応じて表示 */
+    
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    
+    /* スクロールバーのカスタマイズ */
+    scrollbar-width: thin;  /* Firefox用 */
+    scrollbar-color: #8188D8 #F2F3FF;  /* Firefox用 - つまみ色 トラック色 */
+}
+
+/* Webkit（Chrome、Safari等）用のスクロールバーカスタマイズ */
+.write-knowledge-textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+.write-knowledge-textarea::-webkit-scrollbar-track {
+    background: #F2F3FF;
+    border-radius: 4px;
+}
+
+.write-knowledge-textarea::-webkit-scrollbar-thumb {
+    background: #8188D8;
+    border-radius: 4px;
+}
+
+.write-knowledge-textarea::-webkit-scrollbar-thumb:hover {
+    background: #4A52A7;
+}
+
+.write-knowledge-textarea:focus {
+    outline: none;
+}
+
+/* プレースホルダーのスタイル */
+.write-knowledge-textarea::placeholder {
+    color: #999;
 }

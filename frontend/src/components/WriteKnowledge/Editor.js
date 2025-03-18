@@ -1,22 +1,32 @@
 // Editor.js
 // Need install 
 // - quill, react-quill, quill-image-resize
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';  // 追加
 import ReactQuill, { Quill } from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Quill의 Snow 테마 CSS 파일
+import 'react-quill/dist/quill.snow.css'; // QuillのSnowテーマCSSファイル
 import ImageResize from 'quill-image-resize';
 
 import './Editor.css';
 
 Quill.register('modules/imageResize', ImageResize);
 
-const Editor = ({ onDataSubmit }) => {
-  const [value, setValue] = useState('');
+const Editor = ({ onDataSubmit, initialValue = '' }) => {
+  const [value, setValue] = useState(initialValue);
+  const location = useLocation();
+  const isUpdateMode = location.pathname === '/knowledge/update';
+
+  useEffect(() => {
+    // 更新モードで初期値が存在する場合
+    if (isUpdateMode && initialValue) {
+      setValue(initialValue);
+    }
+  }, [isUpdateMode, initialValue]);
 
   const handleChange = (content) => {
-    // Editor에 입력한 값 표시
+    // Editorに入力した値を表示
     setValue(content);
-    // 상위 컴포넌트에 값 전달
+    // 上位コンポーネントに値を渡す
     onDataSubmit(content);
   };
 
@@ -48,7 +58,7 @@ const Editor = ({ onDataSubmit }) => {
         <ReactQuill
           className='write-knowledge-editorbox'
           value={value}
-          placeholder='ナレッジ情報を入力...'
+          placeholder={isUpdateMode ? 'ナレッジを更新...' : 'ナレッジ情報を入力...'}
           onChange={handleChange}
           modules={modules}
         />

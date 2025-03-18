@@ -47,7 +47,7 @@ function Delete() {
             <div className="narrage-title">
               <div>{item.title}</div>
             </div>
-            <div>
+            <div className="button-container">
               <button
                 className="detail-button"
                 onClick={() =>
@@ -56,7 +56,10 @@ function Delete() {
               >
                 詳細
               </button>
-              <button className="delete-button" onClick={() => fetchData_delete(item)}>
+              <button 
+                className="delete-button" 
+                onClick={() => fetchData_delete(item)}
+              >
                 削除
               </button>
             </div>

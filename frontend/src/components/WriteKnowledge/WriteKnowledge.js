@@ -1,18 +1,51 @@
-import React, { useState } from 'react';
-
-// EditorコンポーネントとCSSをインポート
+import React, { useState, useEffect, useRef } from 'react';  // useRefを追加
+import { useLocation, useNavigate } from 'react-router-dom';
 import Editor from './Editor';
 import './WriteKnowledge.css';
-import { apiRequest } from '../Request-manage/request';  // APIリクエスト用のモジュールをインポート
+import { apiRequest } from '../Request-manage/request';
 
 function WriteKnowledge() {
-    // フォームの入力値を管理する状態変数を定義
+    const location = useLocation();
+    const navigate = useNavigate();
+    const isUpdateMode = location.pathname === '/knowledge/update';
+
     const [formData, setFormData] = useState({
         title: '',
         tag: '',
         contents: '',
         image_path: ''
     });
+
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        const measureHeight = () => {
+            if (containerRef.current) {
+                const height = containerRef.current.offsetHeight;
+                console.log('コンテナの高さ:', height);
+            }
+        };
+
+        measureHeight();
+        window.addEventListener('resize', measureHeight);
+
+        return () => {
+            window.removeEventListener('resize', measureHeight);
+        };
+    }, []);
+
+    // 更新モードの場合、初期データをセット
+    useEffect(() => {
+        if (isUpdateMode && location.state?.knowledgeData) {
+            const data = location.state.knowledgeData;
+            setFormData({
+                title: data.title || '',
+                tag: data.tags || '',
+                contents: data.content || '',
+                image_path: data.image_path || ''
+            });
+        }
+    }, [isUpdateMode, location.state]);
 
     // 入力フィールドの値が変更されたときのハンドラー
     const handleChange = (event) => {
@@ -31,7 +64,7 @@ function WriteKnowledge() {
         }));
     };
 
-    // 投稿ボタンクリック時の処理
+    // 送信処理を更新
     const sendData = async () => {
         try {
             // バリデーションチェック
@@ -40,44 +73,55 @@ function WriteKnowledge() {
                 return;
             }
 
-            // 送信データをJSON形式で作成
             const jsonData = JSON.stringify({
+                // 更新モードの場合は、IDも含める
+                ...(isUpdateMode && { id: location.state?.knowledgeData?.id }),
                 title: formData.title,
                 tags: formData.tag,
                 contents: formData.contents,
                 image_path: formData.image_path
             });
 
-            // APIリクエストを送信（JSONヘッダー付き）
-            const response = await apiRequest.post('/add-knowledge', jsonData, {
+            // 更新モードの場合はPUTメソッドを使用
+            const endpoint = isUpdateMode ? '/modify-knowledge' : '/add-knowledge';
+            const method = isUpdateMode ? 'put' : 'post';
+            
+            const response = await apiRequest[method](endpoint, jsonData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
             if (response.status === 200) {
-                alert('ナレッジを投稿しました。');
-                // フォームをクリア
-                setFormData({
-                    title: '',
-                    tag: '',
-                    contents: '',
-                    image_path: ''
-                });
+                alert(isUpdateMode ? 'ナレッジを更新しました。' : 'ナレッジを投稿しました。');
             }
         } catch (error) {
-            console.error('投稿エラー:', error);
-            alert('投稿に失敗しました。');
+            console.error(isUpdateMode ? '更新エラー:' : '投稿エラー:', error);
+            alert(isUpdateMode ? '更新に失敗しました。' : '投稿に失敗しました。');
         }
     };
 
+    // テキストエリアの高さ自動調整関数
+    const adjustHeight = (element) => {
+        element.style.height = 'auto';
+        element.style.height = `${element.scrollHeight}px`;
+    };
+
+    // テキストエリアの変更ハンドラー
+    const handleTextAreaChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+        adjustHeight(event.target);
+    };
+
     return (
-        <div>
-            {/* アウトライン用ラッパー */}
+        <div ref={containerRef}>
             <div className='write-knowledge-wrap-outline'>
                 <div className='write-knowledge-wrap-inline'>
-
-                    {/* 題目入力欄 */}
+                    <h2>{isUpdateMode ? 'ナレッジ更新' : 'ナレッジ投稿'}</h2>
                     <div className='write-knowledge-inputspace-wrap'>
                         <div className='write-knowledge-title'>タイトル</div>
                         <input
@@ -91,7 +135,6 @@ function WriteKnowledge() {
                         />
                     </div>
 
-                    {/* 種類入力欄 */}
                     <div className='write-knowledge-inputspace-wrap'>
                         <div className='write-knowledge-title'>  分類 　</div>
                         <input
@@ -105,28 +148,31 @@ function WriteKnowledge() {
                         />
                     </div>
                     
-                    {/* 画像パス入力欄を追加 */}
                     <div className='write-knowledge-inputspace-wrap'>
                         <div className='write-knowledge-title'>補足情報</div>
-                        <input
-                            className='write-knowledge-inputspace'
-                            type='text'
+                        <textarea
+                            className='write-knowledge-textarea'
                             id='image_path'
                             name='image_path'
                             value={formData.image_path}
-                            onChange={handleChange}
-                            placeholder='（任意）関連URLや画像パス等を入力...'
+                            onChange={handleTextAreaChange}
+                            onFocus={(e) => adjustHeight(e.target)}
+                            placeholder='（任意）関連URLや画像パス等を入力（改行で複数入力可能）...'
+                            rows={1}
                         />
                     </div>
                     
-                    {/* Editorコンポーネントを呼び出し、入力データを受け取る */}
-                    <Editor onDataSubmit={getEditorData} />
+                    <Editor 
+                        onDataSubmit={getEditorData} 
+                        initialValue={formData.contents}  // 初期値を渡す
+                    />
 
-                    {/* 投稿ボタン */}
                     <button
                         className='write-knowledge-send-button'
                         onClick={sendData}
-                    >投稿</button>
+                    >
+                        {isUpdateMode ? '更新' : '投稿'}
+                    </button>
                 </div>
             </div>
         </div>

@@ -43,23 +43,51 @@ def create_default_insert_data(model: Model) -> dict[str, str | None]:
     return default_insert_data
 
 @transactional
-def update_knowledge(data:dict[str,str|int|None]) -> Tuple[dict[str,str|Model],int]:
-    if "id" not in data:return {"message":ErrorMessages.ERROR_ID_005E},99
-    knowledge:Knowledge = get_knowledge_by_id(data["id"])
-    if not knowledge:return ErrorMessages.ERROR_ID_003E,99
-    if "contents" not in data: return {"message":ErrorMessages.ERROR_ID_009E},99
-    if "title" not in data or len(data["title"])<1: return {"message":ErrorMessages.ERROR_ID_008E},99
-    if "author_id" not in data or len(data["author_id"])<1: return {"message":ErrorMessages.ERROR_ID_007E},99
-    except_list = ["id","content","update_by"]
+def update_knowledge(data: dict[str, str|int|None]) -> Tuple[dict[str, str|Model], int]:
+    # 必須パラメータのチェック
+    if "id" not in data:
+        return {"message": ErrorMessages.ERROR_ID_005E}, 99
+    
+    knowledge: Knowledge = get_knowledge_by_id(data["id"])
+    if not knowledge:
+        return {"message": ErrorMessages.ERROR_ID_003E}, 99
+    
+    if "contents" not in data:
+        return {"message": ErrorMessages.ERROR_ID_009E}, 99
+    
+    if "title" not in data or len(data["title"]) < 1:
+        return {"message": ErrorMessages.ERROR_ID_008E}, 99
+    
+    if "author_id" not in data or len(data["author_id"]) < 1:
+        return {"message": ErrorMessages.ERROR_ID_007E}, 99
+
+    # 更新対象外のフィールド
+    except_list = ["id", "content", "update_by"]
+    
+    # 更新可能なフィールドを取得
+    updatable_fields = [attr for attr in dir(knowledge) 
+                       if not attr.startswith('_') and 
+                       attr not in except_list]
+
+    # データを更新
     for k, v in data.items():
-        if k in knowledge and k not in except_list:
+        if k in updatable_fields:
             setattr(knowledge, k, v)
-    html,result = sanitize_quill_html(data["contents"])
-    if result:return {"message":ErrorMessages.ERROR_ID_006E},99
+
+    # HTMLコンテンツのサニタイズ
+    html, result = sanitize_quill_html(data["contents"])
+    if result:
+        return {"message": ErrorMessages.ERROR_ID_006E}, 99
+
+    # 特別なフィールドの更新
     knowledge.content = html
     knowledge.update_at = datetime.now()
     knowledge.update_by = data["author_id"]
-    return {"message":"ナレッジ内容更新が成功しました","knowledge_id":knowledge.id},0
+
+    return {
+        "message": "ナレッジ内容更新が成功しました",
+        "knowledge_id": knowledge.id
+    }, 0
     
 @transactional
 def add_new_knowledge(data:dict[str,str|int|None]) -> Tuple[dict[str,str|Model],int]:
