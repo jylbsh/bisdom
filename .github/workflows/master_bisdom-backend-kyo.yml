@@ -64,7 +64,7 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: unzip /home/runner/work/bisdom/bisdom/backend/release.zip
 
       
       - name: 'Deploy to Azure Web App'
