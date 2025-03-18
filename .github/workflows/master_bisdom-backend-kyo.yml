@@ -47,7 +47,7 @@ jobs:
         with:
           name: python-app
           path: |
-            ./release.zip
+            /home/runner/work/bisdom/bisdom/backend/release.zip
             !venv/
 
   deploy:
